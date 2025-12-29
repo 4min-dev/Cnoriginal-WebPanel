@@ -40,6 +40,26 @@ body {
 
 * {
   font-family: 'SF Pro Display', sans-serif;
+  scrollbar-width: thin;
+  scrollbar-color: #ED0028 #F5F5F5;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #F5F5F5;
+  border-radius: 9999px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #ED0028;
+  border-radius: 9999px;
+}
+
+*::-webkit-scrollbar-button {
+  display: none;
 }
 
 .scrollbar-hide::-webkit-scrollbar {
