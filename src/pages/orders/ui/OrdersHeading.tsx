@@ -2,7 +2,11 @@ import React from 'react'
 import SearchInput from '../../../ui/SearchInput'
 import isMobileDevice from '../../../assets/isMobileDevice'
 
-const OrdersHeading: React.FC = () => {
+type OrdersHeadingProps = {
+    handleSetActiveNewOrderPopup: () => void
+}
+
+const OrdersHeading: React.FC<OrdersHeadingProps> = ({ handleSetActiveNewOrderPopup }) => {
     const isMobile = isMobileDevice()
 
     return (
@@ -13,7 +17,7 @@ const OrdersHeading: React.FC = () => {
 
             <div className='flex justify-between mt-[16px] flex-wrap lg:flex-nowrap'>
                 <div className='flex lg:gap-x-[9px] lg:gap-y-[9px] gap-x-[9px] gap-y-[12px] flex-wrap lg:flex-nowrap'>
-                    <button type='button' className='h-[44px] lg:w-[164px] w-[46.37%] items-center justify-center gap-[8px] flex font-medium text-[16px] text-[#FCFDFF] bg-[#ED0028] border-none outline-none rounded-[10px] cursor-pointer order-[-1] lg:order-none'>
+                    <button type='button' className='h-[44px] lg:w-[164px] w-[46.37%] items-center justify-center gap-[8px] flex font-medium text-[16px] text-[#FCFDFF] bg-[#ED0028] border-none outline-none rounded-[10px] cursor-pointer order-[-1] lg:order-none' onClick={handleSetActiveNewOrderPopup}>
                         <svg className="lg:w-[24px] lg:h-[24px] w-[20px] h-[20px]" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <path d="M4.92896 12H19.0711M12 19.0711V4.92893" stroke="#FCFDFF" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
                         </svg>

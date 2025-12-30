@@ -125,7 +125,7 @@ const OrdersDynamicCard: React.FC<OrdersDynamicCardProps> = ({ data }) => {
             </div>
 
             <div className="relative -mx-6">
-                <div className="absolute pl-6 top-8 bottom-0 pb-24 z-10 flex flex-col justify-between pointer-events-none bg-white gap-[16px] ">
+                <div className="absolute pl-6 top-10 bottom-0 pb-24 z-10 flex flex-col justify-between pointer-events-none bg-white gap-[16px]">
                     {[500, 300, 200, 150, 100, 50, 0].map((value) => (
                         <div key={value} className="text-[13px] text-[#B9B9B9]">
                             {value}
@@ -135,7 +135,7 @@ const OrdersDynamicCard: React.FC<OrdersDynamicCardProps> = ({ data }) => {
 
                 <div
                     ref={scrollContainerRef}
-                    className="scrollbar-hide scroll-smooth overflow-x-auto px-6"
+                    className="scrollbar-hide scroll-smooth overflow-x-auto   px-6"
                 >
                     <div className="min-w-max">
                         <div className="h-[316px] w-[800px]">
