@@ -1,13 +1,17 @@
 import React from 'react'
+import { useSidebar } from '../../../context/SidebarContext'
 
 type MobileHeaderProps = {
     className?: string
 }
 
 const MobileHeader: React.FC<MobileHeaderProps> = ({ className = '' }) => {
+
+    const { openAside } = useSidebar()
+
     return (
         <div className={`flex lg:hidden justify-between items-center ${className}`}>
-            <button type='button' className='w-[48px] h-[48px] flex items-center justify-center outline-none border border-[#F3F3F3] bg-none shadow-[0_0_25.8px_0_#0f0f2b26] rounded-[10px]'>
+            <button type='button' className='w-[48px] h-[48px] flex items-center justify-center outline-none border border-[#F3F3F3] bg-none shadow-[0_0_25.8px_0_#0f0f2b26] rounded-[10px]' onClick={openAside}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
                     <path d="M8.33331 28.3337H31.6666M8.33331 20.0003H31.6666M8.33331 11.667H31.6666" stroke="#ED0028" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
