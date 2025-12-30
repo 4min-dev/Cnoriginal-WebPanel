@@ -5,12 +5,17 @@ import App from './App.tsx'
 import { Provider } from 'react-redux'
 import { store } from './store/index.ts'
 import { BrowserRouter } from 'react-router-dom'
+import AsidePanel from './ui/aside/AsidePanel.tsx'
 
 createRoot(document.getElementById('root')!).render(
+
   <StrictMode>
     <Provider store={store}>
       <BrowserRouter>
-        <App />
+        <div className='flex overflow-hidden'>
+          <AsidePanel />
+          <App />
+        </div>
       </BrowserRouter>
     </Provider>
   </StrictMode>,

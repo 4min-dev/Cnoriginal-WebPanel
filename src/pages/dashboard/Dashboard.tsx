@@ -1,5 +1,4 @@
 import React from 'react'
-import AsidePanel from '../../ui/aside/AsidePanel'
 import DashboardHeading from './ui/DashboardHeading'
 import SubscriptionCard from './ui/SubscriptionCard'
 import OrdersDynamicsCard from './ui/OrdersDynamicCard'
@@ -45,9 +44,6 @@ const Dashboard: React.FC = () => {
 
     return (
         <div className="flex min-h-screen overflow-hidden">
-
-            <AsidePanel />
-
             <div className='flex flex-col pt-[50px] pl-[14px] pr-[16px] lg:pt-[23px] lg:pr-[24px] w-full overflow-hidden'>
                 <MobileHeader />
                 <DashboardHeading />
