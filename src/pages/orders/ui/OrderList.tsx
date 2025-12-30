@@ -3,7 +3,7 @@ import Checkbox from '../../../ui/Checkbox'
 
 const OrderList: React.FC = () => {
     return (
-        <div className='pt-[32px]  pl-[24px] pr-[24px] flex gap-[12px] overflow-x-scroll'>
+        <div className='lg:pt-[32px] pt-[20px] lg:pl-[24px] pl-[16px] lg:pr-[24px] pr-[16px] pb-[50px] lg:pb-0 flex gap-[12px] overflow-x-scroll'>
             <div className='flex flex-col p-[20px] rounded-[16px] bg-white shadow-[0_0_25.8px_0_#0f0f2b26] min-w-[359px] max-w-[359px]'>
                 <div className='flex items-center justify-between'>
                     <div className='flex gap-[8px]'>
@@ -56,7 +56,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -104,7 +104,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -152,7 +152,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -200,7 +200,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -280,7 +280,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -328,7 +328,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -376,7 +376,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -424,7 +424,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -504,7 +504,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -552,7 +552,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -600,7 +600,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -648,7 +648,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -728,7 +728,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -776,7 +776,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -824,7 +824,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -872,7 +872,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -952,7 +952,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -1000,7 +1000,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -1048,7 +1048,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
@@ -1096,7 +1096,7 @@ const OrderList: React.FC = () => {
                                 Трек-номер
                             </span>
 
-                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px]'>
+                            <div className='relative h-[40px] grow flex items-center justify-between border border-[#B9B9B933] rounded-[10px] px-[12px] bg-[#F9F9F9]'>
                                 <span className='font-medium text-[16px] text-[#B9B9B9] h-[22px]'>
                                     #YT543287916CN
                                 </span>
