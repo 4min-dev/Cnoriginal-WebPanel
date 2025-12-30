@@ -34,7 +34,7 @@ const NewOrderPopup: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     }
 
     return (
-        <div className="fixed inset-0 z-50 flex lg:items-end items-center justify-center bg-black/80 md:items-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 md:items-center">
             <div className="lg:w-[507px] w-full mx-[12px] lg:mx-0 bg-white rounded-[20px] md:rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto">
                 <div className="flex items-center justify-between px-[20px] pt-[20px]">
                     <h2 className="lg:text-[28px] text-[20px] font-semibold text-[#33331F]">Новый заказ</h2>
