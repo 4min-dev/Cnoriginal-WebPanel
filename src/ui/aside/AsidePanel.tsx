@@ -3,12 +3,19 @@ import { useLocation } from 'react-router-dom'
 import PaymentPopup from '../PaymentPopup'
 import isMobileDevice from '../../assets/isMobileDevice'
 import { useSidebar } from '../../context/SidebarContext'
+import type TelegramUser from '../../types/TelegramUser'
+
+const devMode = import.meta.env.VITE_DEV_MODE
 
 const AsidePanel: React.FC = () => {
+    const user = JSON.parse(window.localStorage.getItem('user') || '{}') as TelegramUser
+
     const [isPaymentPopup, setIsPaymentPopup] = useState<boolean>(false)
     const location = useLocation()
     const [isHovered, setIsHovered] = useState<boolean>(false)
     const { isAsideActive, closeAside } = useSidebar()
+
+    if ((!user || !user.id) && !devMode) { return null }
 
     const asideLinks = [
         {
@@ -130,15 +137,19 @@ const AsidePanel: React.FC = () => {
                 }
 
                 <div className={`mt-auto flex items-center p-[8px] rounded-[12px] bg-[#F6F6F6] ${isHovered ? 'w-[244px] h-[56px]' : 'w-fit flex-col'} mt-[8px]`}>
-                    <img className='w-[40px] h-[40px] rounded-[8px]' src='/images/userAvatar.jpg' alt="Аватар" />
+                    <img className='w-[40px] h-[40px] rounded-[8px]' src={user.photo_url} alt="Аватар" />
 
                     {
                         isHovered && <div className='flex flex-col gap-[2px] ml-[12px]'>
                             <span className='font-medium text-[16px] text-[#333333] whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[19px]'>
-                                Фомин Максим
+                                {
+                                    user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name || user.last_name || 'Пользователь'
+                                }
                             </span>
                             <span className='text-[14px] text-[#333333] opacity-60 whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[17px]'>
-                                @fomin_dev
+                                {
+                                    `@${user.username}`
+                                }
                             </span>
                         </div>
                     }
@@ -215,15 +226,22 @@ const AsidePanel: React.FC = () => {
                 </div>
 
                 <div className={`flex items-start p-[8px] rounded-[12px] bg-[#F6F6F6] mt-[8px]`}>
-                    <img className='w-[40px] h-[40px] rounded-[8px]' src='/images/userAvatar.jpg' alt="Аватар" />
+                    <img className='w-[40px] h-[40px] rounded-[8px]' src={user.photo_url} alt="Аватар" />
 
                     <div className='flex flex-col gap-[2px] ml-[12px]'>
                         <span className='font-medium text-[16px] text-[#333333] whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[19px]'>
-                            Фомин Максим
+                            {
+                                user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name || user.last_name || 'Пользователь'
+                            }
                         </span>
-                        <span className='text-[14px] text-[#333333] opacity-60 whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[17px]'>
-                            @fomin_dev
-                        </span>
+
+                        {
+                            user.username && <span className='text-[14px] text-[#333333] opacity-60 whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[17px]'>
+                                {
+                                    `@${user.username}`
+                                }
+                            </span>
+                        }
                     </div>
 
                     <button type='button' className={`bg-none outline-none border-none cursor-pointer  ml-auto flex items-center justify-center mt-auto mb-auto`}>

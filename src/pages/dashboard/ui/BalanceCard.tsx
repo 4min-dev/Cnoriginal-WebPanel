@@ -2,6 +2,7 @@ import React from 'react'
 import { ResponsiveLine } from '@nivo/line'
 import { linearGradientDef } from '@nivo/core'
 import isMobileDevice from '../../../assets/isMobileDevice'
+import CalendarSelect from '../../../ui/CalendarSelect'
 
 type BalanceAnalyticsObject = {
     month: string
@@ -11,6 +12,7 @@ type BalanceAnalyticsObject = {
 
 type BalanceCardProps = {
     data: BalanceAnalyticsObject[]
+    setSelectedPeriod: (period: { start: Date | null, end: Date | null }) => void
 }
 
 type CustomLayerProps = {
@@ -21,7 +23,6 @@ type CustomLayerProps = {
 
 const ZeroLineLayer = ({ yScale, innerWidth }: CustomLayerProps) => {
     const yZero = yScale(0)
-
     if (yZero < 0) return null
 
     return (
@@ -36,7 +37,7 @@ const ZeroLineLayer = ({ yScale, innerWidth }: CustomLayerProps) => {
     )
 }
 
-const BalanceCard: React.FC<BalanceCardProps> = ({ data }) => {
+const BalanceCard: React.FC<BalanceCardProps> = ({ data, setSelectedPeriod }) => {
     const isMobile = isMobileDevice()
 
     const chartData = [
@@ -49,6 +50,38 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ data }) => {
             data: data.map(d => ({ x: d.month, y: d.spending }))
         }
     ]
+
+    const calculateChange = (values: number[]) => {
+        if (values.length < 2) return 0
+
+        const mid = Math.floor(values.length / 2)
+        const current = values.slice(mid).reduce((a, b) => a + b, 0)
+        const previous = values.slice(0, mid).reduce((a, b) => a + b, 0)
+
+        if (previous === 0) return current > 0 ? 100 : 0
+
+        return ((current - previous) / previous) * 100
+    }
+
+    const replenishmentValues = data.map(d => d.replenishment)
+    const spendingValues = data.map(d => d.spending)
+
+    const replenishmentChange = calculateChange(replenishmentValues)
+    const spendingChange = calculateChange(spendingValues)
+
+    const totalReplenishment = data.reduce((sum, d) => sum + d.replenishment, 0)
+    const totalSpending = data.reduce((sum, d) => sum + d.spending, 0)
+
+    const formatChange = (change: number) => {
+        const abs = Math.abs(change).toFixed(1)
+        return change >= 0 ? `${abs}%` : `${abs}%`
+    }
+
+    const getReplenishmentColor = (change: number) =>
+        change >= 0 ? '#15DB15' : '#ED0028'
+
+    const getSpendingColor = (change: number) =>
+        change <= 0 ? '#15DB15' : '#ED0028'
 
     const scrollContainerRef = React.useRef<HTMLDivElement>(null)
     const [canScrollLeft, setCanScrollLeft] = React.useState<boolean>(false)
@@ -80,30 +113,14 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ data }) => {
     const scrollLeft = () => scrollContainerRef.current?.scrollBy({ left: -300, behavior: 'smooth' })
     const scrollRight = () => scrollContainerRef.current?.scrollBy({ left: 300, behavior: 'smooth' })
 
-    const totalReplenishment = data.reduce((sum, d) => sum + d.replenishment, 0)
-    const totalSpending = data.reduce((sum, d) => sum + d.spending, 0)
-
-    const replenishmentChange = 13.4
-    const spendingChange = 11.2
-
     return (
         <div className="bg-white rounded-2xl p-[20px] shadow-sm border border-[#F3F3F3] overflow-hidden">
             <div className="flex items-center justify-between">
                 <span className="font-medium text-[16px] text-[#333333]">Баланс ₽</span>
-                <button className="flex items-center justify-center gap-[4px] w-[89px] h-[32px] rounded-[10px] bg-[#F6F6F6] font-medium text-[13px] text-[#333333] cursor-pointer">
-                    Период
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <g clip-path="url(#clip0_351_2315)">
-                            <path d="M5.83337 8.33333L10 12.5" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                            <path d="M10 12.5L14.1667 8.33333" stroke="black" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                        </g>
-                        <defs>
-                            <clipPath id="clip0_351_2315">
-                                <rect width="20" height="20" fill="white" />
-                            </clipPath>
-                        </defs>
-                    </svg>
-                </button>
+                <CalendarSelect
+                    title="Период"
+                    onPeriodChange={setSelectedPeriod}
+                />
             </div>
 
             <div className="flex items-center justify-start gap-[40px] lg:gap-[32px] mt-[16px]">
@@ -116,10 +133,21 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ data }) => {
                                 {totalReplenishment.toLocaleString()} ₽
                             </span>
                         </div>
-                        <div className="flex items-center px-[8px] h-[26px] rounded-[13px] bg-[#F6F6F6] gap-[4px] w-fit">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <g clip-path="url(#clip0_351_2241)">
-                                    <path d="M11.3334 4.66665L11.3334 11.3333M11.3334 11.3333L4.66671 11.3333M11.3334 11.3333L4.66671 4.66665" stroke="#ED0028" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+                        <div
+                            className="flex items-center px-[8px] h-[26px] rounded-[13px] bg-[#F6F6F6] gap-[4px] w-fit"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" style={{ color: getReplenishmentColor(replenishmentChange) }}>
+                                <g clipPath="url(#clip0_351_2241)">
+                                    <path
+                                        d={replenishmentChange >= 0
+                                            ? "M11.3334 4.66665L11.3334 11.3333M11.3334 11.3333L4.66671 11.3333M11.3334 11.3333L4.66671 4.66665"
+                                            : "M11.3333 11.3337L11.3333 4.66699M11.3333 4.66699L4.66665 4.66699M11.3333 4.66699L4.66665 11.3337"
+                                        }
+                                        stroke="currentColor"
+                                        strokeWidth="1.3"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
                                 </g>
                                 <defs>
                                     <clipPath id="clip0_351_2241">
@@ -127,7 +155,9 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ data }) => {
                                     </clipPath>
                                 </defs>
                             </svg>
-                            <span className="font-medium text-[13px] text-[#333333]">{replenishmentChange}%</span>
+                            <span className="font-medium text-[13px]">
+                                {formatChange(replenishmentChange)}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -141,10 +171,22 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ data }) => {
                                 {totalSpending.toLocaleString()} ₽
                             </span>
                         </div>
-                        <div className="flex items-center px-[8px] h-[26px] rounded-[13px] bg-[#F6F6F6] gap-[4px] w-fit">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <g clip-path="url(#clip0_403_2215)">
-                                    <path d="M11.3333 11.3337L11.3333 4.66699M11.3333 4.66699L4.66665 4.66699M11.3333 4.66699L4.66665 11.3337" stroke="#15DB15" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" />
+                        <div
+                            className="flex items-center px-[8px] h-[26px] rounded-[13px] bg-[#F6F6F6] gap-[4px] w-fit"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                style={{ color: getSpendingColor(spendingChange) }}>
+                                <g clipPath="url(#clip0_403_2215)">
+                                    <path
+                                        d={spendingChange <= 0
+                                            ? "M11.3334 4.66665L11.3334 11.3333M11.3334 11.3333L4.66671 11.3333M11.3334 11.3333L4.66671 4.66665"
+                                            : "M11.3333 11.3337L11.3333 4.66699M11.3333 4.66699L4.66665 4.66699M11.3333 4.66699L4.66665 11.3337"
+                                        }
+                                        stroke="currentColor"
+                                        strokeWidth="1.3"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                    />
                                 </g>
                                 <defs>
                                     <clipPath id="clip0_403_2215">
@@ -152,7 +194,9 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ data }) => {
                                     </clipPath>
                                 </defs>
                             </svg>
-                            <span className="font-medium text-[13px] text-[#333333]">{spendingChange}%</span>
+                            <span className="font-medium text-[13px]">
+                                {formatChange(spendingChange)}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -231,7 +275,7 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ data }) => {
                                             <div className="text-[13px] text-[#B9B9B9] mb-1">{slice.points[0].data.x}</div>
                                             <div className="flex items-center gap-2 mb-2">
                                                 <div className="w-3 h-3 rounded bg-[#1D7BFF]" />
-                                                <span className="text-[14px] font-medium">+{replenishment.toLocaleString()} ₽</span>
+                                                <span className="text-[14px] font-medium">{replenishment.toLocaleString()} ₽</span>
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <div className="w-3 h-3 rounded bg-[#ED0028]" />
