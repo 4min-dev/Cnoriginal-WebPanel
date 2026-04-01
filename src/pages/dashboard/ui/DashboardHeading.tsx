@@ -47,10 +47,10 @@ const DashboardHeading: React.FC<DashboardHeadingProps> = ({ dobropostData, deli
 
     return (
         <div className='lg:ml-[26px] mt-[24px] lg:mt-none'>
-            <div className='flex flex-wrap gap-[8px] lg:gap-[12px]'>
-                <div className='grow bg-white min-h-[66px] lg:min-h-[85px] flex flex-col lg:p-[12px] lg:rounded-[16px] lg:gap-[8px] p-[8px] rounded-[12px] gap-[6px] shadow-[0_0_25.8px_0_#0f0f2b26]'>
+            <div className='grid grid-cols-3 lg:grid-cols-6 gap-[8px] lg:gap-[12px]'>
+                <div className='grow bg-white min-h-[66px] lg:min-h-[85px] flex flex-col lg:p-[12px] lg:rounded-[16px] lg:gap-[8px] p-[8px] rounded-[12px] gap-[6px] shadow-[0_0_25.8px_0_#0f0f2b26] order-[4] lg:order-none'>
                     <div className='flex items-center lg:gap-[10px] gap-[8px]'>
-                        <div className='flex items-center justify-center lg:w-[36px] lg:h-[36px] lg:rounded-[10px] w-[28px] h-[28px] rounded-[8px] bg-[#F6F6F6]'>
+                        <div className='flex items-center justify-center lg:rounded-[10px] w-[36px] h-[36px] rounded-[8px] bg-[#F6F6F6]'>
                             <svg className="w-[16px] h-[16px] lg:w-[20px] lg:h-[20px]" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path d="M7 10.125L8.875 12L12 7.625M17 9.5C17 10.5567 16.475 11.4917 15.6725 12.0567C15.759 12.5506 15.7251 13.0582 15.5738 13.5363C15.4225 14.0144 15.1582 14.449 14.8033 14.8033C14.449 15.1582 14.0144 15.4225 13.5363 15.5738C13.0582 15.7251 12.5506 15.759 12.0567 15.6725C11.7685 16.0829 11.3857 16.4178 10.9407 16.6489C10.4956 16.88 10.0015 17.0004 9.5 17C8.44333 17 7.50833 16.475 6.94333 15.6725C6.44936 15.7589 5.94184 15.725 5.46374 15.5737C4.98564 15.4224 4.55102 15.1582 4.19667 14.8033C3.84177 14.449 3.57748 14.0144 3.42619 13.5363C3.27489 13.0582 3.24104 12.5506 3.3275 12.0567C2.9171 11.7685 2.58218 11.3857 2.35111 10.9407C2.12003 10.4956 1.99959 10.0015 2 9.5C2 8.44333 2.525 7.50833 3.3275 6.94333C3.24104 6.44936 3.27489 5.94182 3.42619 5.46371C3.57748 4.98559 3.84177 4.55098 4.19667 4.19667C4.55102 3.84183 4.98564 3.57758 5.46374 3.42629C5.94184 3.27499 6.44936 3.24111 6.94333 3.3275C7.23154 2.91715 7.61435 2.58227 8.05938 2.3512C8.50441 2.12013 8.99856 1.99966 9.5 2C10.5567 2 11.4917 2.525 12.0567 3.3275C12.5506 3.24111 13.0582 3.27499 13.5363 3.42629C14.0144 3.57758 14.449 3.84183 14.8033 4.19667C15.1582 4.55102 15.4224 4.98564 15.5737 5.46374C15.725 5.94184 15.7589 6.44936 15.6725 6.94333C16.0829 7.23149 16.4178 7.61429 16.6489 8.05933C16.88 8.50437 17.0004 8.99854 17 9.5Z" stroke="#ED0028" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
@@ -64,7 +64,7 @@ const DashboardHeading: React.FC<DashboardHeadingProps> = ({ dobropostData, deli
                     </span>
                 </div>
 
-                <div className='grow bg-white min-h-[66px] lg:min-h-[85px] flex flex-col lg:p-[12px] lg:rounded-[16px] lg:gap-[8px] p-[8px] rounded-[12px] gap-[6px] shadow-[0_0_25.8px_0_#0f0f2b26]'>
+                <div className='grow bg-white min-h-[66px] lg:min-h-[85px] flex flex-col lg:p-[12px] lg:rounded-[16px] lg:gap-[8px] p-[8px] rounded-[12px] gap-[6px] shadow-[0_0_25.8px_0_#0f0f2b26] order-[1] lg:order-none'>
                     <div className='flex items-center gap-[10px]'>
                         <div className='flex items-center justify-center w-[36px] h-[36px] rounded-[10px] bg-[#F6F6F6]'>
                             <svg className="w-[16px] h-[16px] lg:w-[20px] lg:h-[20px]" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -81,7 +81,7 @@ const DashboardHeading: React.FC<DashboardHeadingProps> = ({ dobropostData, deli
                     </span>
                 </div>
 
-                <div className='grow bg-white min-h-[66px] lg:min-h-[85px] flex flex-col lg:p-[12px] lg:rounded-[16px] lg:gap-[8px] p-[8px] rounded-[12px] gap-[6px] shadow-[0_0_25.8px_0_#0f0f2b26]'>
+                <div className='grow bg-white min-h-[66px] lg:min-h-[85px] flex flex-col lg:p-[12px] lg:rounded-[16px] lg:gap-[8px] p-[8px] rounded-[12px] gap-[6px] shadow-[0_0_25.8px_0_#0f0f2b26] order-[2] lg:order-none'>
                     <div className='flex items-center gap-[10px]'>
                         <div className='flex items-center justify-center w-[36px] h-[36px] rounded-[10px] bg-[#F6F6F6]'>
                             <svg className="w-[16px] h-[16px] lg:w-[20px] lg:h-[20px]" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -97,7 +97,7 @@ const DashboardHeading: React.FC<DashboardHeadingProps> = ({ dobropostData, deli
                     </span>
                 </div>
 
-                <div className='grow bg-white min-h-[66px] lg:min-h-[85px] flex flex-col lg:p-[12px] lg:rounded-[16px] lg:gap-[8px] p-[8px] rounded-[12px] gap-[6px] shadow-[0_0_25.8px_0_#0f0f2b26]'>
+                <div className='grow bg-white min-h-[66px] lg:min-h-[85px] flex flex-col lg:p-[12px] lg:rounded-[16px] lg:gap-[8px] p-[8px] rounded-[12px] gap-[6px] shadow-[0_0_25.8px_0_#0f0f2b26] order-[3] lg:order-none'>
                     <div className='flex items-center gap-[10px]'>
                         <div className='flex items-center justify-center w-[36px] h-[36px] rounded-[10px] bg-[#F6F6F6]'>
                             <svg className="w-[16px] h-[16px] lg:w-[20px] lg:h-[20px]" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -113,7 +113,7 @@ const DashboardHeading: React.FC<DashboardHeadingProps> = ({ dobropostData, deli
                     </span>
                 </div>
 
-                <div className='grow bg-white min-h-[66px] lg:min-h-[85px] flex flex-col lg:p-[12px] lg:rounded-[16px] lg:gap-[8px] p-[8px] rounded-[12px] gap-[6px] shadow-[0_0_25.8px_0_#0f0f2b26]'>
+                <div className='grow bg-white min-h-[66px] lg:min-h-[85px] flex flex-col lg:p-[12px] lg:rounded-[16px] lg:gap-[8px] p-[8px] rounded-[12px] gap-[6px] shadow-[0_0_25.8px_0_#0f0f2b26] order-[5] lg:order-none'>
                     <div className='flex items-center gap-[10px]'>
                         <div className='flex items-center justify-center w-[36px] h-[36px] rounded-[10px] bg-[#F6F6F6]'>
                             <svg className="w-[16px] h-[16px] lg:w-[20px] lg:h-[20px]" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -129,7 +129,7 @@ const DashboardHeading: React.FC<DashboardHeadingProps> = ({ dobropostData, deli
                     </span>
                 </div>
 
-                <div className='grow bg-white min-h-[66px] lg:min-h-[85px] flex flex-col lg:p-[12px] lg:rounded-[16px] lg:gap-[8px] p-[8px] rounded-[12px] gap-[6px] shadow-[0_0_25.8px_0_#0f0f2b26]'>
+                <div className='grow bg-white min-h-[66px] lg:min-h-[85px] flex flex-col lg:p-[12px] lg:rounded-[16px] lg:gap-[8px] p-[8px] rounded-[12px] gap-[6px] shadow-[0_0_25.8px_0_#0f0f2b26] order-[6] lg:order-none'>
                     <div className='flex items-center gap-[10px]'>
                         <div className='flex items-center justify-center w-[36px] h-[36px] rounded-[10px] bg-[#F6F6F6]'>
                             <svg className="w-[16px] h-[16px] lg:w-[20px] lg:h-[20px]" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">

@@ -8,17 +8,21 @@ import ActivityCard from './ui/ActivityCard'
 import BannerCard from './ui/BannerCard'
 import MobileHeader from '../orders/ui/MobileHeader'
 import ReferralCard from './ui/ReferralCard'
-
 import { useGetReferralsQuery } from '../../redux/services/referralService'
 import { useAppSelector } from '../../hooks/useAppDispatch'
 import { useGetDobropostOrdersQuery } from '../../redux/services/dobropostOrders'
 import { useGetNotificationsQuery } from '../../redux/services/notificationsService'
 import { useGetBalanceQuery } from '../../redux/services/balanceService'
 import { useGetDeliveryOrdersQuery } from '../../redux/services/deliveryService'
+import { useGetProfileQuery } from '../../redux/services/userService'
+import { useGetSubscriptionStatusQuery, usePaySubscriptionMutation } from '../../redux/services/subscriptionService'
+import Popup from '../../ui/popup/Popup'
+import { SubscriptionIcon } from '../../ui/icons/SubscriptionIcon'
+import SuccessIcon from '../../ui/icons/SuccessIcon'
 
 const Dashboard: React.FC = () => {
-    const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated)
-    const accessToken = useAppSelector((state) => state.auth.accessToken)
+    const isAuthenticated = useAppSelector((state) => state?.auth.isAuthenticated)
+    const accessToken = useAppSelector((state) => state?.auth.accessToken)
 
     const [selectedPeriod, setSelectedPeriod] = React.useState<{
         start: Date | null
@@ -27,6 +31,8 @@ const Dashboard: React.FC = () => {
         start: null,
         end: null,
     })
+    const [isSelectSubscriptionPay, setSelectSubscriptionPay] = React.useState<boolean>(false)
+    const [isLinkCopied, setIsLinkCopied] = React.useState<boolean>(false)
 
     const formatDate = (date: Date | null): string | undefined => {
         if (!date) return undefined
@@ -48,6 +54,16 @@ const Dashboard: React.FC = () => {
             skip: !isAuthenticated || !accessToken,
         }
     )
+
+    const { data: profile, refetch: refetchProfile } = useGetProfileQuery(undefined, {
+        skip: !isAuthenticated || !accessToken,
+    })
+
+    const [paySubscription, { isLoading: isSubscriptionPayPending }] = usePaySubscriptionMutation()
+
+    const { data: subscriptionStatus } = useGetSubscriptionStatusQuery(undefined, {
+        skip: !isAuthenticated || !accessToken,
+    })
 
     const { data: referrals } = useGetReferralsQuery(undefined, {
         skip: !isAuthenticated || !accessToken,
@@ -101,38 +117,76 @@ const Dashboard: React.FC = () => {
         }))
     }, [balanceResponse])
 
+    async function handlePaySubscription() {
+        try {
+            await paySubscription().unwrap()
+        } catch (err) {
+            alert('Ошибка при оплате подписки. Попробуйте еще раз.')
+            console.log(err)
+        } finally {
+            refetchProfile()
+            setSelectSubscriptionPay(false)
+        }
+    }
+
     return (
-        <div className="flex min-h-screen overflow-hidden w-full">
-            <div className="flex flex-col pt-[50px] pr-[16px] lg:pt-[23px] lg:pr-[24px] w-full overflow-hidden">
-                <MobileHeader />
-                <DashboardHeading
-                    dobropostData={dobropostOrders?.data?.dobropost || []}
-                    deliveryData={deliveryOrders?.data?.delivery || []}
-                />
+        <>
+            {
+                isSelectSubscriptionPay && (
+                    <Popup icon={<SubscriptionIcon />} title={subscriptionStatus?.data ? 'Продление подписки' : 'Подписка кончилась!'} description={subscriptionStatus?.data ? 'Продлите вашу подписку, чтобы продолжить пользоваться всеми функциями сервиса.' : 'Доступ к функциям Китайщины ограничен, оплатиите подписку для возобновления работы сервиса.'} buttonDisabled={isSubscriptionPayPending} buttonText={isSubscriptionPayPending ? 'Ожидание' : 'Оплатить 490 ₽'} buttonHandler={() => handlePaySubscription()} popupClassname='lg:w-[525px]' closeHandler={() => setSelectSubscriptionPay(false)} />
+                )
+            }
 
-                <div className="flex flex-col lg:flex-row lg:mt-[25px] lg:ml-[24px] lg:gap-[12px] mt-[16px] gap-[16px]">
-                    <div className="flex flex-col lg:max-w-[49.455%] lg:gap-[12px] lg:pb-[71px] gap-[16px]">
-                        <SubscriptionCard />
-                        <ReferralCard
-                            qr={`data:image/png;base64,${referrals?.data.qr ?? ''}`}
-                            referralsValue={referrals?.data.referrals || 0}
-                            referralUrl={referrals?.data.referral_url || ''}
-                        />
-                        <BalanceCard
-                            data={balanceData}
-                            setSelectedPeriod={setSelectedPeriod}
-                        />
-                        <BannerCard className="hidden lg:flex" />
-                    </div>
+            {
+                isLinkCopied && (
+                    <Popup
+                        icon={<SuccessIcon />}
+                        title='Ссылка скопирована!'
+                        description='Реферальная ссылка успешно скопирована в буфер обмена.'
+                        buttonText='Хорошо'
+                        buttonHandler={() => setIsLinkCopied(false)}
+                        closeHandler={() => setIsLinkCopied(false)}
+                        popupClassname='lg:w-[480px]'
+                    />
+                )
+            }
 
-                    <div className="flex flex-col grow gap-[12px]">
-                        <NotificationsCard notifications={notifications?.data || []} />
-                        <ActivityCard />
-                        <BannerCard className="lg:hidden pb-[4px]" />
+            <div className="flex min-h-screen overflow-hidden w-full">
+                <div className="flex flex-col pt-[50px] pr-[16px] pl-[16px] lg:pl-0 lg:pt-[23px] lg:pr-[24px] w-full overflow-hidden">
+                    <MobileHeader />
+                    <DashboardHeading
+                        dobropostData={dobropostOrders?.data?.dobropost || []}
+                        deliveryData={deliveryOrders?.data?.delivery || []}
+                    />
+
+                    <div className="flex flex-col lg:flex-row lg:mt-[25px] lg:ml-[24px] lg:gap-[12px] mt-[16px] gap-[16px]">
+                        <div className="flex flex-col lg:max-w-[49.455%] lg:gap-[12px] lg:pb-[71px] gap-[16px]">
+                            <SubscriptionCard profile={profile?.data} subscriptionActive={subscriptionStatus?.data || false} payHandler={() => setSelectSubscriptionPay(true)} />
+                            <ReferralCard
+                                qr={`data:image/png;base64,${referrals?.data.qr ?? ''}`}
+                                referralsValue={referrals?.data.referrals || 0}
+                                referralUrl={referrals?.data.referral_url || ''}
+                                handleCopyLink={() => {
+                                    navigator.clipboard.writeText(referrals?.data.referral_url || '')
+                                    setIsLinkCopied(true)
+                                }}
+                            />
+                            <BalanceCard
+                                data={balanceData}
+                                setSelectedPeriod={setSelectedPeriod}
+                            />
+                            <BannerCard className="hidden lg:flex" />
+                        </div>
+
+                        <div className="flex flex-col grow gap-[12px]">
+                            <NotificationsCard notifications={notifications?.data || []} />
+                            <ActivityCard />
+                            <BannerCard className="lg:hidden pb-[4px]" />
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }
 

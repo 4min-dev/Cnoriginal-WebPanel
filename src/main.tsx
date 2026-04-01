@@ -14,9 +14,11 @@ createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
       <BrowserRouter>
         <SidebarProvider>
-          <div className='flex overflow-hidden'>
+          <div className="flex h-screen overflow-hidden">
             <AsidePanel />
-            <App />
+            <div className="flex-1 overflow-auto">
+              <App />
+            </div>
           </div>
         </SidebarProvider>
       </BrowserRouter>

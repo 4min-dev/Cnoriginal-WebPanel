@@ -11,11 +11,13 @@ const AsidePanel: React.FC = () => {
     const user = JSON.parse(window.localStorage.getItem('user') || '{}') as TelegramUser
 
     const [isPaymentPopup, setIsPaymentPopup] = useState<boolean>(false)
-    const location = useLocation()
     const [isHovered, setIsHovered] = useState<boolean>(false)
-    const { isAsideActive, closeAside } = useSidebar()
 
-    if ((!user || !user.id) && !devMode) { return null }
+    const location = useLocation()
+    const { isAsideActive, closeAside } = useSidebar()
+    const isMobile = isMobileDevice()
+
+    if ((!user || !user.id) && !devMode) return null
 
     const asideLinks = [
         {
@@ -51,208 +53,193 @@ const AsidePanel: React.FC = () => {
         }
     ]
 
-    const isMobile = isMobileDevice()
-
     return (
         <>
             {isPaymentPopup && <PaymentPopup onClose={() => setIsPaymentPopup(false)} />}
 
-            {!isMobile ? <aside className='flex flex-col p-[24px] bg-white shadow-[0_0_25.8px_0_#0f0f2b26] h-[860px] rounded-bl-[16px] rounded-br-[16px]' onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-                <div className='flex items-center'>
-                    <svg className='w-[61px] h-[32px]' xmlns="http://www.w3.org/2000/svg" width="61" height="32" viewBox="0 0 61 32" fill="none">
-                        <path d="M30.828 16C30.828 7.16344 23.9269 0 15.414 0H0C0 8.83656 6.90107 16 15.414 16H0C0 24.8366 6.90107 32 15.414 32C23.9269 32 30.828 24.8366 30.828 16Z" fill="#ED0028" />
-                        <path d="M30.172 0H45.586C54.0989 0 61 7.16344 61 16V32H45.586C37.0731 32 30.172 24.8366 30.172 16V0Z" fill="#ED0028" />
-                    </svg>
+            {!isMobile ? (
+                <aside
+                    className={`flex flex-col bg-white shadow-[0_0_25.8px_0_#0f0f2b26] h-[860px] rounded-bl-[16px] rounded-br-[16px] transition-all duration-300 ease-out overflow-hidden ${isHovered ? 'w-[292px] p-[24px]' : 'w-[88px] px-[16px] py-[24px]'} sticky left-0 top-0 z-20`}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                >
+                    <div className="flex items-center h-[52px]">
+                        <div className="flex-shrink-0">
+                            <svg className={`w-[61px] h-[36px] relative transition-all duration-300 ${isHovered ? 'ml-0 right-0' : 'right-[4px]'}`} xmlns="http://www.w3.org/2000/svg" width="61" height="32" viewBox="0 0 61 32" fill="none">
+                                <path d="M30.828 16C30.828 7.16344 23.9269 0 15.414 0H0C0 8.83656 6.90107 16 15.414 16H0C0 24.8366 6.90107 32 15.414 32C23.9269 32 30.828 24.8366 30.828 16Z" fill="#ED0028" />
+                                <path d="M30.172 0H45.586C54.0989 0 61 7.16344 61 16V32H45.586C37.0731 32 30.172 24.8366 30.172 16V0Z" fill="#ED0028" />
+                            </svg>
+                        </div>
 
-                    {
-                        isHovered && <>
-                            <div className='flex flex-col gap-[2px] ml-[12px]'>
-                                <span className='font-semibold text-[18px] text-[#ED0028] h-[18px]'>
-                                    Китайщина
-                                </span>
-                                <span className='text-[14px] text-[#949494] opacity-50 h-[14px]'>
-                                    Оригинальная
-                                </span>
-                            </div>
-
-                            <button type='button' className='w-[36px] h-[36px] rounded-[8px] flex items-center justify-center shadow-[0_0_25.8px_0_#0f0f2b26] ml-[32px] cursor-pointer'>
+                        {isHovered && (
+                            <button type="button" className="ml-auto w-[36px] h-[36px] rounded-[8px] flex items-center justify-center shadow-[0_0_25.8px_0_#0f0f2b26] bg-white">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                     <path d="M6.875 7.5V4.375C6.875 3.87772 7.07254 3.40081 7.42417 3.04917C7.77581 2.69754 8.25272 2.5 8.75 2.5H13.75C14.2473 2.5 14.7242 2.69754 15.0758 3.04917C15.4275 3.40081 15.625 3.87772 15.625 4.375V15.625C15.625 16.1223 15.4275 16.5992 15.0758 16.9508C14.7242 17.3025 14.2473 17.5 13.75 17.5H8.75C8.25272 17.5 7.77581 17.3025 7.42417 16.9508C7.07254 16.5992 6.875 16.1223 6.875 15.625V12.5M4.375 12.5L1.875 10M1.875 10L4.375 7.5M1.875 10H12.5" stroke="#B9B9B9" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                             </button>
-                        </>
-                    }
-                </div>
+                        )}
+                    </div>
 
-                <nav className={`flex flex-col mt-[40px] gap-[16px] ${!isHovered && 'items-center !mt-[23px]'}`}>
-                    {asideLinks.map((asideLink) => {
-                        const isActive = location.pathname.includes(asideLink.pathname)
+                    <nav className="flex flex-col mt-[32px] gap-[8px]">
+                        {asideLinks.map((asideLink) => {
+                            const isActive = location.pathname.includes(asideLink.pathname)
 
-                        return (
-                            <a
-                                key={asideLink.pathname}
-                                href={`${asideLink.pathname}`}
-                                className={`
-                                py-[10px] px-[8px] rounded-[12px] flex items-center gap-[12px]
-                                ${isHovered ? 'w-[244px]' : 'w-fit'} h-[44px] transition-all
-                                ${isActive
-                                        ? 'bg-[#F9F9F9]'
-                                        : 'bg-transparent hover:bg-[#F9F9F9]/50'
-                                    }
-                            `}
-                            >
-                                <div className={isActive ? 'text-[#333333]' : 'text-[#B9B9B9]'}>
-                                    {asideLink.icon}
-                                </div>
+                            return (
+                                <a
+                                    key={asideLink.pathname}
+                                    href={asideLink.pathname}
+                                    className={`h-[44px] px-3 rounded-[12px] flex items-center justify-centergap-[12px] gap-[12px] transition-all duration-200 ${isActive ? 'bg-[#F9F9F9]' : 'hover:bg-[#F9F9F9]/70'} ${isHovered ? 'w-full' : 'w-[44px]'}`}
+                                >
+                                    <div className={`${isActive ? 'text-[#333333]' : 'text-[#B9B9B9]'} flex-shrink-0`}>
+                                        {asideLink.icon}
+                                    </div>
 
-                                {
-                                    isHovered && <span className={`font-medium text-[16px] ${isActive ? 'text-[#333333]' : 'text-[#B9B9B9]'}`}>
+                                    <span className={`font-medium text-[16px] whitespace-nowrap transition-all duration-300 ${isActive ? 'text-[#333333]' : 'text-[#B9B9B9]'} ${isHovered ? 'opacity-100' : 'opacity-0 w-0 overflow-hidden'}`}>
                                         {asideLink.title}
                                     </span>
-                                }
-                            </a>
-                        )
-                    })}
-                </nav>
+                                </a>
+                            )
+                        })}
+                    </nav>
 
-                {
-                    isHovered && <div className='flex items-center justify-between bg-[linear-gradient(94.53deg,#FF7E7E_-23.56%,#ED0028_104.18%)] w-[244px] h-[65px] rounded-[12px] p-[12px] mt-[375px]'>
-                        <div className='flex flex-col'>
-                            <span className='text-[14px] text-[#FFFFFF] opacity-60 h-[17px]'>
-                                Баланс
-                            </span>
+                    {isHovered && (
+                        <div className="mt-auto">
+                            <div className="bg-[linear-gradient(94.53deg,#FF7E7E_-23.56%,#ED0028_104.18%)] w-full h-[65px] rounded-[12px] p-[12px] mt-[40px]">
+                                <div className="flex items-center justify-between">
+                                    <div className="flex flex-col">
+                                        <span className="text-[14px] text-[#FFFFFF] opacity-60 h-[17px]">Баланс</span>
+                                        <span className="font-semibold text-[20px] text-[#FFFFFF] h-[24px]">32 000 ₽</span>
+                                    </div>
 
-                            <span className='font-semibold text-[20px] text-[#FFFFFF] h-[24px] '>
-                                32 000 ₽
-                            </span>
+                                    <button
+                                        type="button"
+                                        className="w-[36px] h-[36px] flex items-center justify-center rounded-[8px] shadow-[0_0_25.8px_0_#0f0f2b26] bg-white outline-none border-none cursor-pointer"
+                                        onClick={() => setIsPaymentPopup(true)}
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                            <path fillRule="evenodd" clipRule="evenodd" d="M12 2.25C6.615 2.25 2.25 6.615 2.25 12C2.25 17.385 6.615 21.75 12 21.75C17.385 21.75 21.75 17.385 21.75 12C21.75 6.615 17.385 2.25 12 2.25ZM12.75 9C12.75 8.80109 12.671 8.61032 12.5303 8.46967C12.3897 8.32902 12.1989 8.25 12 8.25C11.8011 8.25 11.6103 8.32902 11.4697 8.46967C11.329 8.61032 11.25 8.80109 11.25 9V11.25H9C8.80109 11.25 8.61032 11.329 8.46967 11.4697C8.32902 11.6103 8.25 11.8011 8.25 12C8.25 12.1989 8.32902 12.3897 8.46967 12.5303C8.61032 12.671 8.80109 12.75 9 12.75H11.25V15C11.25 15.1989 11.329 15.3897 11.4697 15.5303C11.6103 15.671 11.8011 15.75 12 15.75C12.1989 15.75 12.3897 15.671 12.5303 15.5303C12.671 15.3897 12.75 15.1989 12.75 15V12.75H15C15.1989 12.75 15.3897 12.671 15.5303 12.5303C15.671 12.3897 15.75 12.1989 15.75 12C15.75 11.8011 15.671 11.6103 15.5303 11.4697C15.3897 11.329 15.1989 11.25 15 11.25H12.75V9Z" fill="#EA0129" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
                         </div>
+                    )}
 
+                    <div className={`flex items-center p-[8px] rounded-[12px] bg-[#F6F6F6] ${isHovered ? 'h-[56px] mt-[8px]' : 'w-fit flex-col mt-auto'}`}>
+                        <img className='w-[40px] h-[40px] rounded-[8px]' src={user.photo_url} alt="Аватар" />
 
-                        <button type='button' className='w-[36px] h-[36px] flex items-center justify-center rounded-[8px] shadow-[0_0_25.8px_0_#0f0f2b26] bg-white outline-none border-none cursor-pointer' onClick={() => setIsPaymentPopup(true)}>
+                        {
+                            isHovered && <div className='flex flex-col gap-[2px] ml-[12px]'>
+                                <span className='font-medium text-[16px] text-[#333333] whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[19px]'>
+                                    {
+                                        user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name || user.last_name || 'Пользователь'
+                                    }
+                                </span>
+                                <span className='text-[14px] text-[#333333] opacity-60 whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[17px]'>
+                                    {
+                                        `@${user.username}`
+                                    }
+                                </span>
+                            </div>
+                        }
+
+                        <button type='button' className={`bg-none outline-none border-none cursor-pointer  ml-auto flex items-center justify-center ${isHovered ? 'ml-[22px]' : '!ml-0'} mt-[0px]`}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.25C6.615 2.25 2.25 6.615 2.25 12C2.25 17.385 6.615 21.75 12 21.75C17.385 21.75 21.75 17.385 21.75 12C21.75 6.615 17.385 2.25 12 2.25ZM12.75 9C12.75 8.80109 12.671 8.61032 12.5303 8.46967C12.3897 8.32902 12.1989 8.25 12 8.25C11.8011 8.25 11.6103 8.32902 11.4697 8.46967C11.329 8.61032 11.25 8.80109 11.25 9V11.25H9C8.80109 11.25 8.61032 11.329 8.46967 11.4697C8.32902 11.6103 8.25 11.8011 8.25 12C8.25 12.1989 8.32902 12.3897 8.46967 12.5303C8.61032 12.671 8.80109 12.75 9 12.75H11.25V15C11.25 15.1989 11.329 15.3897 11.4697 15.5303C11.6103 15.671 11.8011 15.75 12 15.75C12.1989 15.75 12.3897 15.671 12.5303 15.5303C12.671 15.3897 12.75 15.1989 12.75 15V12.75H15C15.1989 12.75 15.3897 12.671 15.5303 12.5303C15.671 12.3897 15.75 12.1989 15.75 12C15.75 11.8011 15.671 11.6103 15.5303 11.4697C15.3897 11.329 15.1989 11.25 15 11.25H12.75V9Z" fill="#EA0129" />
+                                <g opacity="0.3">
+                                    <path fillRule="evenodd" clipRule="evenodd" d="M11.0781 2.25C10.1611 2.25 9.37906 2.913 9.22806 3.817L9.05006 4.889C9.03006 5.009 8.93506 5.149 8.75306 5.237C8.41041 5.40171 8.08079 5.59226 7.76706 5.807C7.60106 5.922 7.43306 5.933 7.31706 5.89L6.30006 5.508C5.8843 5.35224 5.42675 5.34906 5.00887 5.49904C4.59099 5.64901 4.23989 5.94241 4.01806 6.327L3.09606 7.924C2.87415 8.30836 2.79577 8.75897 2.87487 9.19569C2.95398 9.6324 3.18543 10.0269 3.52806 10.309L4.36806 11.001C4.46306 11.079 4.53806 11.23 4.52206 11.431C4.49356 11.8101 4.49356 12.1909 4.52206 12.57C4.53706 12.77 4.46306 12.922 4.36906 13L3.52806 13.692C3.18543 13.9741 2.95398 14.3686 2.87487 14.8053C2.79577 15.242 2.87415 15.6926 3.09606 16.077L4.01806 17.674C4.24004 18.0584 4.59121 18.3516 5.00908 18.5014C5.42695 18.6512 5.88441 18.6478 6.30006 18.492L7.31906 18.11C7.43406 18.067 7.60206 18.079 7.76906 18.192C8.08106 18.406 8.41006 18.597 8.75406 18.762C8.93606 18.85 9.03106 18.99 9.05106 19.112L9.22906 20.183C9.38006 21.087 10.1621 21.75 11.0791 21.75H12.9231C13.8391 21.75 14.6221 21.087 14.7731 20.183L14.9511 19.111C14.9711 18.991 15.0651 18.851 15.2481 18.762C15.5921 18.597 15.9211 18.406 16.2331 18.192C16.4001 18.078 16.5681 18.067 16.6831 18.11L17.7031 18.492C18.1186 18.6472 18.5756 18.6501 18.9931 18.5002C19.4105 18.3502 19.7613 18.0571 19.9831 17.673L20.9061 16.076C21.128 15.6916 21.2063 15.241 21.1272 14.8043C21.0481 14.3676 20.8167 13.9731 20.4741 13.691L19.6341 12.999C19.5391 12.921 19.4641 12.77 19.4801 12.569C19.5085 12.1899 19.5085 11.8091 19.4801 11.43C19.4641 11.23 19.5391 11.078 19.6331 11L20.4731 10.308C21.1811 9.726 21.3641 8.718 20.9061 7.923L19.9841 6.326C19.7621 5.94159 19.4109 5.6484 18.993 5.49861C18.5752 5.34883 18.1177 5.35215 17.7021 5.508L16.6821 5.89C16.5681 5.933 16.4001 5.921 16.2331 5.807C15.9197 5.5923 15.5904 5.40175 15.2481 5.237C15.0651 5.15 14.9711 5.01 14.9511 4.889L14.7721 3.817C14.6991 3.37906 14.4732 2.98122 14.1344 2.69427C13.7956 2.40732 13.366 2.24989 12.9221 2.25H11.0791H11.0781ZM12.0001 15.75C12.9946 15.75 13.9484 15.3549 14.6517 14.6517C15.355 13.9484 15.7501 12.9946 15.7501 12C15.7501 11.0054 15.355 10.0516 14.6517 9.34835C13.9484 8.64509 12.9946 8.25 12.0001 8.25C11.0055 8.25 10.0517 8.64509 9.34841 9.34835C8.64514 10.0516 8.25006 11.0054 8.25006 12C8.25006 12.9946 8.64514 13.9484 9.34841 14.6517C10.0517 15.3549 11.0055 15.75 12.0001 15.75Z" fill="#333333" />
+                                </g>
                             </svg>
                         </button>
                     </div>
-                }
+                </aside>
+            ) : (
+                isAsideActive && (
+                    <aside className="fixed bg-white left-0 right-0 top-0 bottom-0 z-500 pt-[32px] pl-[32px] pr-[32px] pb-[30px] flex flex-col">
+                        <button type="button" className="outline-none w-[48px] h-[48px] bg-none border border-[#F3F3F3] flex items-center justify-center rounded-[10px]" onClick={closeAside}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <g clipPath="url(#clip0_696_10698)">
+                                    <path d="M11.667 11.6665L28.3337 28.3332M11.667 28.3332L28.3337 11.6665" stroke="#ED0028" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                </g>
+                                <defs>
+                                    <clipPath id="clip0_696_10698">
+                                        <rect width="40" height="40" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                        </button>
 
-                <div className={`mt-auto flex items-center p-[8px] rounded-[12px] bg-[#F6F6F6] ${isHovered ? 'w-[244px] h-[56px]' : 'w-fit flex-col'} mt-[8px]`}>
-                    <img className='w-[40px] h-[40px] rounded-[8px]' src={user.photo_url} alt="Аватар" />
+                        <nav className="flex flex-col mt-[28px] gap-[16px]">
+                            {asideLinks.map((asideLink, index) => {
+                                const isActive = location.pathname.includes(asideLink.pathname)
+                                const isLast = index === asideLinks.length - 1
 
-                    {
-                        isHovered && <div className='flex flex-col gap-[2px] ml-[12px]'>
-                            <span className='font-medium text-[16px] text-[#333333] whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[19px]'>
-                                {
-                                    user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name || user.last_name || 'Пользователь'
-                                }
-                            </span>
-                            <span className='text-[14px] text-[#333333] opacity-60 whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[17px]'>
-                                {
-                                    `@${user.username}`
-                                }
-                            </span>
-                        </div>
-                    }
+                                return (
+                                    <a
+                                        key={asideLink.pathname}
+                                        href={asideLink.pathname}
+                                        className={`py-[10px] px-[8px] rounded-[12px] flex items-center gap-[12px] h-[44px] transition-all ${isActive ? 'bg-[#F9F9F9]' : 'bg-transparent'} ${isLast ? 'border-t border-[#B9B9B9] pt-[24px] rounded-none' : ''}`}
+                                    >
+                                        <div className={`${isActive ? 'text-[#333333]' : 'text-[#B9B9B9]'} w-[24px] h-[24px]`}>
+                                            {asideLink.icon}
+                                        </div>
+                                        <span className={`font-medium text-[16px] ${isActive ? 'text-[#333333]' : 'text-[#B9B9B9]'}`}>
+                                            {asideLink.title}
+                                        </span>
+                                    </a>
+                                )
+                            })}
+                        </nav>
 
-                    <button type='button' className={`bg-none outline-none border-none cursor-pointer  ml-auto flex items-center justify-center ${isHovered ? 'ml-[22px]' : '!ml-0'} mt-[12px]`}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <g opacity="0.3">
-                                <path fillRule="evenodd" clipRule="evenodd" d="M11.0781 2.25C10.1611 2.25 9.37906 2.913 9.22806 3.817L9.05006 4.889C9.03006 5.009 8.93506 5.149 8.75306 5.237C8.41041 5.40171 8.08079 5.59226 7.76706 5.807C7.60106 5.922 7.43306 5.933 7.31706 5.89L6.30006 5.508C5.8843 5.35224 5.42675 5.34906 5.00887 5.49904C4.59099 5.64901 4.23989 5.94241 4.01806 6.327L3.09606 7.924C2.87415 8.30836 2.79577 8.75897 2.87487 9.19569C2.95398 9.6324 3.18543 10.0269 3.52806 10.309L4.36806 11.001C4.46306 11.079 4.53806 11.23 4.52206 11.431C4.49356 11.8101 4.49356 12.1909 4.52206 12.57C4.53706 12.77 4.46306 12.922 4.36906 13L3.52806 13.692C3.18543 13.9741 2.95398 14.3686 2.87487 14.8053C2.79577 15.242 2.87415 15.6926 3.09606 16.077L4.01806 17.674C4.24004 18.0584 4.59121 18.3516 5.00908 18.5014C5.42695 18.6512 5.88441 18.6478 6.30006 18.492L7.31906 18.11C7.43406 18.067 7.60206 18.079 7.76906 18.192C8.08106 18.406 8.41006 18.597 8.75406 18.762C8.93606 18.85 9.03106 18.99 9.05106 19.112L9.22906 20.183C9.38006 21.087 10.1621 21.75 11.0791 21.75H12.9231C13.8391 21.75 14.6221 21.087 14.7731 20.183L14.9511 19.111C14.9711 18.991 15.0651 18.851 15.2481 18.762C15.5921 18.597 15.9211 18.406 16.2331 18.192C16.4001 18.078 16.5681 18.067 16.6831 18.11L17.7031 18.492C18.1186 18.6472 18.5756 18.6501 18.9931 18.5002C19.4105 18.3502 19.7613 18.0571 19.9831 17.673L20.9061 16.076C21.128 15.6916 21.2063 15.241 21.1272 14.8043C21.0481 14.3676 20.8167 13.9731 20.4741 13.691L19.6341 12.999C19.5391 12.921 19.4641 12.77 19.4801 12.569C19.5085 12.1899 19.5085 11.8091 19.4801 11.43C19.4641 11.23 19.5391 11.078 19.6331 11L20.4731 10.308C21.1811 9.726 21.3641 8.718 20.9061 7.923L19.9841 6.326C19.7621 5.94159 19.4109 5.6484 18.993 5.49861C18.5752 5.34883 18.1177 5.35215 17.7021 5.508L16.6821 5.89C16.5681 5.933 16.4001 5.921 16.2331 5.807C15.9197 5.5923 15.5904 5.40175 15.2481 5.237C15.0651 5.15 14.9711 5.01 14.9511 4.889L14.7721 3.817C14.6991 3.37906 14.4732 2.98122 14.1344 2.69427C13.7956 2.40732 13.366 2.24989 12.9221 2.25H11.0791H11.0781ZM12.0001 15.75C12.9946 15.75 13.9484 15.3549 14.6517 14.6517C15.355 13.9484 15.7501 12.9946 15.7501 12C15.7501 11.0054 15.355 10.0516 14.6517 9.34835C13.9484 8.64509 12.9946 8.25 12.0001 8.25C11.0055 8.25 10.0517 8.64509 9.34841 9.34835C8.64514 10.0516 8.25006 11.0054 8.25006 12C8.25006 12.9946 8.64514 13.9484 9.34841 14.6517C10.0517 15.3549 11.0055 15.75 12.0001 15.75Z" fill="#333333" />
-                            </g>
-                        </svg>
-                    </button>
-                </div>
-            </aside> : (isAsideActive) && <aside className='fixed bg-white left-0 right-0 top-0 bottom-0 z-500 pt-[32px] pl-[32px] pr-[32px] pb-[30px] flex flex-col'>
-                <button type='button' className='outline-none w-[48px] h-[48px] bg-none border border-[#F3F3F3]  flex items-center justify-center rounded-[10px]' onClick={closeAside}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
-                        <g clip-path="url(#clip0_696_10698)">
-                            <path d="M11.667 11.6665L28.3337 28.3332M11.667 28.3332L28.3337 11.6665" stroke="#ED0028" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                        </g>
-                        <defs>
-                            <clipPath id="clip0_696_10698">
-                                <rect width="40" height="40" fill="white" />
-                            </clipPath>
-                        </defs>
-                    </svg>
-                </button>
+                        <div className="flex items-center justify-between bg-[linear-gradient(94.53deg,#FF7E7E_-23.56%,#ED0028_104.18%)] w-full h-[65px] rounded-[12px] p-[12px] mt-auto">
+                            <div className="flex flex-col">
+                                <span className="text-[14px] text-[#FFFFFF] opacity-60 h-[17px]">Баланс</span>
+                                <span className="font-semibold text-[20px] text-[#FFFFFF] h-[24px]">32 000 ₽</span>
+                            </div>
 
-                <nav className="flex flex-col mt-[28px] gap-[16px]">
-                    {asideLinks.map((asideLink, index) => {
-                        const isActive = location.pathname.includes(asideLink.pathname)
-                        const isLast = index === asideLinks.length - 1
-
-                        return (
-                            <a
-                                key={asideLink.pathname}
-                                href={`${asideLink.pathname}`}
-                                className={`
-                    py-[10px] px-[8px] rounded-[12px] flex items-center gap-[12px]
-                    h-[44px] transition-all
-                    ${isActive ? 'bg-[#F9F9F9]' : 'bg-transparent'}
-                    ${isLast ? 'border-t border-[#B9B9B9] pt-[24px] rounded-none' : ''}
-                `}
+                            <button
+                                type="button"
+                                className="w-[36px] h-[36px] flex items-center justify-center rounded-[8px] shadow-[0_0_25.8px_0_#0f0f2b26] bg-white outline-none border-none cursor-pointer"
+                                onClick={() => {
+                                    closeAside()
+                                    setIsPaymentPopup(true)
+                                }}
                             >
-                                <div className={`${isActive ? 'text-[#333333]' : 'text-[#B9B9B9]'} w-[24px] h-[24px]`}>
-                                    {asideLink.icon}
-                                </div>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <path fillRule="evenodd" clipRule="evenodd" d="M12 2.25C6.615 2.25 2.25 6.615 2.25 12C2.25 17.385 6.615 21.75 12 21.75C17.385 21.75 21.75 17.385 21.75 12C21.75 6.615 17.385 2.25 12 2.25ZM12.75 9C12.75 8.80109 12.671 8.61032 12.5303 8.46967C12.3897 8.32902 12.1989 8.25 12 8.25C11.8011 8.25 11.6103 8.32902 11.4697 8.46967C11.329 8.61032 11.25 8.80109 11.25 9V11.25H9C8.80109 11.25 8.61032 11.329 8.46967 11.4697C8.32902 11.6103 8.25 11.8011 8.25 12C8.25 12.1989 8.32902 12.3897 8.46967 12.5303C8.61032 12.671 8.80109 12.75 9 12.75H11.25V15C11.25 15.1989 11.329 15.3897 11.4697 15.5303C11.6103 15.671 11.8011 15.75 12 15.75C12.1989 15.75 12.3897 15.671 12.5303 15.5303C12.671 15.3897 12.75 15.1989 12.75 15V12.75H15C15.1989 12.75 15.3897 12.671 15.5303 12.5303C15.671 12.3897 15.75 12.1989 15.75 12C15.75 11.8011 15.671 11.6103 15.5303 11.4697C15.3897 11.329 15.1989 11.25 15 11.25H12.75V9Z" fill="#EA0129" />
+                                </svg>
+                            </button>
+                        </div>
 
-                                <span className={`font-medium text-[16px] ${isActive ? 'text-[#333333]' : 'text-[#B9B9B9]'}`}>
-                                    {asideLink.title}
+                        <div className={`flex items-start p-[8px] rounded-[12px] bg-[#F6F6F6] mt-[8px]`}>
+                            <img className='w-[40px] h-[40px] rounded-[8px]' src={user.photo_url} alt="Аватар" />
+
+                            <div className='flex flex-col gap-[2px] ml-[12px]'>
+                                <span className='font-medium text-[16px] text-[#333333] whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[19px]'>
+                                    {
+                                        user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name || user.last_name || 'Пользователь'
+                                    }
                                 </span>
-                            </a>
-                        )
-                    })}
-                </nav>
 
-                <div className='flex items-center justify-between bg-[linear-gradient(94.53deg,#FF7E7E_-23.56%,#ED0028_104.18%)] w-full h-[65px] rounded-[12px] p-[12px] mt-auto'>
-                    <div className='flex flex-col'>
-                        <span className='text-[14px] text-[#FFFFFF] opacity-60 h-[17px]'>
-                            Баланс
-                        </span>
-
-                        <span className='font-semibold text-[20px] text-[#FFFFFF] h-[24px] '>
-                            32 000 ₽
-                        </span>
-                    </div>
-
-                    <button type='button' className='w-[36px] h-[36px] flex items-center justify-center rounded-[8px] shadow-[0_0_25.8px_0_#0f0f2b26] bg-white outline-none border-none cursor-pointer' onClick={() => {
-                        closeAside()
-                        setIsPaymentPopup(true)
-                    }}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2.25C6.615 2.25 2.25 6.615 2.25 12C2.25 17.385 6.615 21.75 12 21.75C17.385 21.75 21.75 17.385 21.75 12C21.75 6.615 17.385 2.25 12 2.25ZM12.75 9C12.75 8.80109 12.671 8.61032 12.5303 8.46967C12.3897 8.32902 12.1989 8.25 12 8.25C11.8011 8.25 11.6103 8.32902 11.4697 8.46967C11.329 8.61032 11.25 8.80109 11.25 9V11.25H9C8.80109 11.25 8.61032 11.329 8.46967 11.4697C8.32902 11.6103 8.25 11.8011 8.25 12C8.25 12.1989 8.32902 12.3897 8.46967 12.5303C8.61032 12.671 8.80109 12.75 9 12.75H11.25V15C11.25 15.1989 11.329 15.3897 11.4697 15.5303C11.6103 15.671 11.8011 15.75 12 15.75C12.1989 15.75 12.3897 15.671 12.5303 15.5303C12.671 15.3897 12.75 15.1989 12.75 15V12.75H15C15.1989 12.75 15.3897 12.671 15.5303 12.5303C15.671 12.3897 15.75 12.1989 15.75 12C15.75 11.8011 15.671 11.6103 15.5303 11.4697C15.3897 11.329 15.1989 11.25 15 11.25H12.75V9Z" fill="#EA0129" />
-                        </svg>
-                    </button>
-                </div>
-
-                <div className={`flex items-start p-[8px] rounded-[12px] bg-[#F6F6F6] mt-[8px]`}>
-                    <img className='w-[40px] h-[40px] rounded-[8px]' src={user.photo_url} alt="Аватар" />
-
-                    <div className='flex flex-col gap-[2px] ml-[12px]'>
-                        <span className='font-medium text-[16px] text-[#333333] whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[19px]'>
-                            {
-                                user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name || user.last_name || 'Пользователь'
-                            }
-                        </span>
-
-                        {
-                            user.username && <span className='text-[14px] text-[#333333] opacity-60 whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[17px]'>
                                 {
-                                    `@${user.username}`
+                                    user.username && <span className='text-[14px] text-[#333333] opacity-60 whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[17px]'>
+                                        {
+                                            `@${user.username}`
+                                        }
+                                    </span>
                                 }
-                            </span>
-                        }
-                    </div>
+                            </div>
 
-                    <button type='button' className={`bg-none outline-none border-none cursor-pointer  ml-auto flex items-center justify-center mt-auto mb-auto`}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <g opacity="0.3">
-                                <path fillRule="evenodd" clipRule="evenodd" d="M11.0781 2.25C10.1611 2.25 9.37906 2.913 9.22806 3.817L9.05006 4.889C9.03006 5.009 8.93506 5.149 8.75306 5.237C8.41041 5.40171 8.08079 5.59226 7.76706 5.807C7.60106 5.922 7.43306 5.933 7.31706 5.89L6.30006 5.508C5.8843 5.35224 5.42675 5.34906 5.00887 5.49904C4.59099 5.64901 4.23989 5.94241 4.01806 6.327L3.09606 7.924C2.87415 8.30836 2.79577 8.75897 2.87487 9.19569C2.95398 9.6324 3.18543 10.0269 3.52806 10.309L4.36806 11.001C4.46306 11.079 4.53806 11.23 4.52206 11.431C4.49356 11.8101 4.49356 12.1909 4.52206 12.57C4.53706 12.77 4.46306 12.922 4.36906 13L3.52806 13.692C3.18543 13.9741 2.95398 14.3686 2.87487 14.8053C2.79577 15.242 2.87415 15.6926 3.09606 16.077L4.01806 17.674C4.24004 18.0584 4.59121 18.3516 5.00908 18.5014C5.42695 18.6512 5.88441 18.6478 6.30006 18.492L7.31906 18.11C7.43406 18.067 7.60206 18.079 7.76906 18.192C8.08106 18.406 8.41006 18.597 8.75406 18.762C8.93606 18.85 9.03106 18.99 9.05106 19.112L9.22906 20.183C9.38006 21.087 10.1621 21.75 11.0791 21.75H12.9231C13.8391 21.75 14.6221 21.087 14.7731 20.183L14.9511 19.111C14.9711 18.991 15.0651 18.851 15.2481 18.762C15.5921 18.597 15.9211 18.406 16.2331 18.192C16.4001 18.078 16.5681 18.067 16.6831 18.11L17.7031 18.492C18.1186 18.6472 18.5756 18.6501 18.9931 18.5002C19.4105 18.3502 19.7613 18.0571 19.9831 17.673L20.9061 16.076C21.128 15.6916 21.2063 15.241 21.1272 14.8043C21.0481 14.3676 20.8167 13.9731 20.4741 13.691L19.6341 12.999C19.5391 12.921 19.4641 12.77 19.4801 12.569C19.5085 12.1899 19.5085 11.8091 19.4801 11.43C19.4641 11.23 19.5391 11.078 19.6331 11L20.4731 10.308C21.1811 9.726 21.3641 8.718 20.9061 7.923L19.9841 6.326C19.7621 5.94159 19.4109 5.6484 18.993 5.49861C18.5752 5.34883 18.1177 5.35215 17.7021 5.508L16.6821 5.89C16.5681 5.933 16.4001 5.921 16.2331 5.807C15.9197 5.5923 15.5904 5.40175 15.2481 5.237C15.0651 5.15 14.9711 5.01 14.9511 4.889L14.7721 3.817C14.6991 3.37906 14.4732 2.98122 14.1344 2.69427C13.7956 2.40732 13.366 2.24989 12.9221 2.25H11.0791H11.0781ZM12.0001 15.75C12.9946 15.75 13.9484 15.3549 14.6517 14.6517C15.355 13.9484 15.7501 12.9946 15.7501 12C15.7501 11.0054 15.355 10.0516 14.6517 9.34835C13.9484 8.64509 12.9946 8.25 12.0001 8.25C11.0055 8.25 10.0517 8.64509 9.34841 9.34835C8.64514 10.0516 8.25006 11.0054 8.25006 12C8.25006 12.9946 8.64514 13.9484 9.34841 14.6517C10.0517 15.3549 11.0055 15.75 12.0001 15.75Z" fill="#333333" />
-                            </g>
-                        </svg>
-                    </button>
-                </div>
-            </aside>}
+                            <button type='button' className={`bg-none outline-none border-none cursor-pointer  ml-auto flex items-center justify-center mt-auto mb-auto`}>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                    <g opacity="0.3">
+                                        <path fillRule="evenodd" clipRule="evenodd" d="M11.0781 2.25C10.1611 2.25 9.37906 2.913 9.22806 3.817L9.05006 4.889C9.03006 5.009 8.93506 5.149 8.75306 5.237C8.41041 5.40171 8.08079 5.59226 7.76706 5.807C7.60106 5.922 7.43306 5.933 7.31706 5.89L6.30006 5.508C5.8843 5.35224 5.42675 5.34906 5.00887 5.49904C4.59099 5.64901 4.23989 5.94241 4.01806 6.327L3.09606 7.924C2.87415 8.30836 2.79577 8.75897 2.87487 9.19569C2.95398 9.6324 3.18543 10.0269 3.52806 10.309L4.36806 11.001C4.46306 11.079 4.53806 11.23 4.52206 11.431C4.49356 11.8101 4.49356 12.1909 4.52206 12.57C4.53706 12.77 4.46306 12.922 4.36906 13L3.52806 13.692C3.18543 13.9741 2.95398 14.3686 2.87487 14.8053C2.79577 15.242 2.87415 15.6926 3.09606 16.077L4.01806 17.674C4.24004 18.0584 4.59121 18.3516 5.00908 18.5014C5.42695 18.6512 5.88441 18.6478 6.30006 18.492L7.31906 18.11C7.43406 18.067 7.60206 18.079 7.76906 18.192C8.08106 18.406 8.41006 18.597 8.75406 18.762C8.93606 18.85 9.03106 18.99 9.05106 19.112L9.22906 20.183C9.38006 21.087 10.1621 21.75 11.0791 21.75H12.9231C13.8391 21.75 14.6221 21.087 14.7731 20.183L14.9511 19.111C14.9711 18.991 15.0651 18.851 15.2481 18.762C15.5921 18.597 15.9211 18.406 16.2331 18.192C16.4001 18.078 16.5681 18.067 16.6831 18.11L17.7031 18.492C18.1186 18.6472 18.5756 18.6501 18.9931 18.5002C19.4105 18.3502 19.7613 18.0571 19.9831 17.673L20.9061 16.076C21.128 15.6916 21.2063 15.241 21.1272 14.8043C21.0481 14.3676 20.8167 13.9731 20.4741 13.691L19.6341 12.999C19.5391 12.921 19.4641 12.77 19.4801 12.569C19.5085 12.1899 19.5085 11.8091 19.4801 11.43C19.4641 11.23 19.5391 11.078 19.6331 11L20.4731 10.308C21.1811 9.726 21.3641 8.718 20.9061 7.923L19.9841 6.326C19.7621 5.94159 19.4109 5.6484 18.993 5.49861C18.5752 5.34883 18.1177 5.35215 17.7021 5.508L16.6821 5.89C16.5681 5.933 16.4001 5.921 16.2331 5.807C15.9197 5.5923 15.5904 5.40175 15.2481 5.237C15.0651 5.15 14.9711 5.01 14.9511 4.889L14.7721 3.817C14.6991 3.37906 14.4732 2.98122 14.1344 2.69427C13.7956 2.40732 13.366 2.24989 12.9221 2.25H11.0791H11.0781ZM12.0001 15.75C12.9946 15.75 13.9484 15.3549 14.6517 14.6517C15.355 13.9484 15.7501 12.9946 15.7501 12C15.7501 11.0054 15.355 10.0516 14.6517 9.34835C13.9484 8.64509 12.9946 8.25 12.0001 8.25C11.0055 8.25 10.0517 8.64509 9.34841 9.34835C8.64514 10.0516 8.25006 11.0054 8.25006 12C8.25006 12.9946 8.64514 13.9484 9.34841 14.6517C10.0517 15.3549 11.0055 15.75 12.0001 15.75Z" fill="#333333" />
+                                    </g>
+                                </svg>
+                            </button>
+                        </div>
+                    </aside>
+                )
+            )}
         </>
     )
 }

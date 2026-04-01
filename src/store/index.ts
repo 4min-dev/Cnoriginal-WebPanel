@@ -7,6 +7,7 @@ import { balanceService } from "../redux/services/balanceService"
 import { userService } from "../redux/services/userService"
 import { deliveryService } from "../redux/services/deliveryService"
 import { dobropostService } from "../redux/services/dobropostOrders"
+import { subscriptionService } from "../redux/services/subscriptionService"
 
 export const store = configureStore({
     reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
         [balanceService.reducerPath]: balanceService.reducer,
         [userService.reducerPath]: userService.reducer,
         [deliveryService.reducerPath]: deliveryService.reducer,
+        [subscriptionService.reducerPath]: subscriptionService.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(
         referralService.middleware,
@@ -26,7 +28,8 @@ export const store = configureStore({
         notificationsService.middleware,
         balanceService.middleware,
         userService.middleware,
-        deliveryService.middleware
+        deliveryService.middleware,
+        subscriptionService.middleware,
     )
 })
 

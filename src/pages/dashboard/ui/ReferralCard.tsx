@@ -1,12 +1,14 @@
 import React from 'react'
+import isMobileDevice from '../../../assets/isMobileDevice'
 
 export type ReferralCard = {
     qr: string,
     referralsValue: number,
-    referralUrl: string
+    referralUrl: string,
+    handleCopyLink: () => void
 }
 
-const ReferralCard: React.FC<ReferralCard> = ({ qr, referralsValue, referralUrl }) => {
+const ReferralCard: React.FC<ReferralCard> = ({ qr, referralsValue, referralUrl, handleCopyLink }) => {
 
     function getReferralsValue() {
         let endWord = ''
@@ -21,53 +23,97 @@ const ReferralCard: React.FC<ReferralCard> = ({ qr, referralsValue, referralUrl 
     return (
         <div>
             <div className='flex flex-col py-[20px] px-[18px] bg-white border border-[#F3F3F3] rounded-[20px]'>
-                <span className='font-medum text-[16px] text-[#333333] h-[19px]'>
-                    Реферальная система
-                </span>
 
-                <div className='flex lg:gap-[12px] lg:mt-[27px] justify-between'>
-                    <div className='lg:w-[230px] lg:h-[230px] border border-[#F3F3F3] lg:rounded-[16px] flex items-center justify-center'>
-                        <img src={qr} className='w-[200.99px] h-[200.99px]' alt='QR' />
+                {
+                    isMobileDevice() ? (
+                        <div className='flex gap-[8px] items-end'>
+                            <span className='font-medum text-[18px] text-[#333333] h-[22px]'>
+                                Реферальная ссылка
+                            </span>
+
+                            <span className='lg:h-[22px] h-[18px] w-fit lg:py-[3.5px] lg:px-[6px] rounded-[12px] lg:min-w-[63px] py-[3px] px-[4px] min-w-[55px] flex items-center justify-center bg-[#1D7BFF] text-[13px] text-white top-[2px] relative'>
+                                {getReferralsValue()}
+                            </span>
+                        </div>
+                    ) : (
+                        <span className='font-medum text-[16px] text-[#333333] h-[19px]'>
+                            Реферальная система
+                        </span>
+                    )
+                }
+
+                <div className='flex lg:gap-[12px] lg:mt-[27px] justify-between lg:flex-row flex-col mt-[16px]'>
+                    <div className="w-full lg:max-w-[230px] 
+                    aspect-square 
+                    lg:aspect-auto
+                    lg:border lg:border-[#F3F3F3]
+                    lg:shadow-none
+                    shadow-[0px_0px_25.8px_0px_#0F0F2B0D] 
+                    rounded-[20px] lg:rounded-[16px] 
+                    flex items-center justify-center 
+                    bg-white overflow-hidden">
+
+                        <img
+                            src={qr}
+                            className="w-full h-full lg:w-[200.99px] lg:h-[200.99px]  object-contain"
+                            alt="QR код для сканирования"
+                        />
                     </div>
 
-                    <div className='flex flex-col lg:gap-[12px] grow justify-between'>
-                        <div className='flex flex-col border border-[#F3F3F3] lg:rounded-[16px] pt-[20px] pl-[20px] pr-[20px] pb-[16px] w-full'>
-                            <div className='flex flex-col '>
-                                <span className='lg:h-[22px] h-[18px] w-fit lg:py-[3.5px] lg:px-[6px] rounded-[12px] lg:min-w-[63px] py-[3px] px-[4px] min-w-[55px] flex items-center justify-center bg-[#1D7BFF] text-[13px] text-white'>
-                                    {getReferralsValue()}
-                                </span>
+                    <div className='flex flex-col gap-[12px] grow justify-between'>
+                        {!isMobileDevice() && (
+                            <div className='flex flex-col lg:border lg:border-[#F3F3F3] lg:rounded-[16px] pt-[20px] pl-[20px] pr-[20px] pb-[16px] w-full'>
+                                <div className='flex flex-col '>
 
-                                <div className='flex flex-col lg:gap-[6px] mt-[8px]'>
-                                    <span className='lg:text-[24px] h-[29px] font-semibold text-[#333333]'>
-                                        0 ₽
+
+                                    <span className='lg:h-[22px] h-[18px] w-fit lg:py-[3.5px] lg:px-[6px] rounded-[12px] lg:min-w-[63px] py-[3px] px-[4px] min-w-[55px] flex items-center justify-center bg-[#1D7BFF] text-[13px] text-white'>
+                                        {getReferralsValue()}
                                     </span>
 
-                                    <span className='lg:text-[14px] text-[#B9B9B9] h-[17px]'>
-                                        Заработано с рефералов
+                                    <div className='flex flex-col lg:gap-[6px] mt-[8px]'>
+                                        <span className='lg:text-[24px] h-[29px] font-semibold text-[#333333]'>
+                                            0 ₽
+                                        </span>
+
+                                        <span className='lg:text-[14px] text-[#B9B9B9] h-[17px]'>
+                                            Заработано с рефералов
+                                        </span>
+                                    </div>
+
+                                    <a href='#' className='h-[32px] flex justify-between align-end border-t border-dashed border-[#E7E7E7] mt-[20px] pt-[12px]'>
+                                        <span className='lg:text-[16px] text-[#333333] font-medium'>
+                                            О программе
+                                        </span>
+
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M13.5667 9.55837C13.6837 9.67556 13.7495 9.83441 13.7495 10C13.7495 10.1657 13.6837 10.3245 13.5667 10.4417L7.3167 16.6917C7.19822 16.8021 7.04152 16.8622 6.8796 16.8593C6.71768 16.8565 6.56319 16.7909 6.44868 16.6764C6.33417 16.5619 6.26858 16.4074 6.26572 16.2455C6.26287 16.0836 6.32297 15.9268 6.43337 15.8084L12.2417 10L6.43337 4.1917C6.32297 4.07322 6.26287 3.91652 6.26572 3.7546C6.26858 3.59268 6.33417 3.43819 6.44868 3.32368C6.56319 3.20917 6.71768 3.14358 6.8796 3.14072C7.04152 3.13787 7.19822 3.19797 7.3167 3.30837L13.5667 9.55837Z" fill="#B9B9B9" />
+                                        </svg>
+                                    </a>
+
+                                </div>
+                            </div>
+                        )}
+
+                        {
+                            isMobileDevice() && (
+                                <div className='h-[48px] mt-[16px] flex items-center justify-center gap-[8px] px-[14px] rounded-[14px] border border-[#B9B9B933] bg-[#F9F9F9]'>
+                                    <svg className='min-w-[16px] max-w-[16px]' xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.9932 2.00684C13.7291 1.74266 13.4155 1.53309 13.0704 1.39011C12.7253 1.24714 12.3554 1.17354 11.9818 1.17354C11.6082 1.17354 11.2383 1.24714 10.8932 1.39011C10.5481 1.53309 10.2345 1.74266 9.97042 2.00684L6.55745 5.4198C6.23547 5.7415 5.99539 6.13579 5.8574 6.56952C5.71941 7.00326 5.68753 7.46377 5.76444 7.91239C5.84135 8.361 6.02481 8.7846 6.2994 9.1476C6.57398 9.5106 6.93168 9.8024 7.34244 9.99848C7.47388 10.0662 7.57378 10.1825 7.62097 10.3226C7.66815 10.4628 7.6589 10.6158 7.59519 10.7492C7.53148 10.8826 7.41831 10.986 7.27966 11.0375C7.14102 11.0889 6.9878 11.0843 6.85249 11.0246C6.27768 10.7501 5.77713 10.3416 5.39289 9.8335C5.00864 9.32541 4.75191 8.73255 4.64424 8.10469C4.53658 7.47684 4.58113 6.83231 4.77414 6.22523C4.96716 5.61816 5.30302 5.06625 5.75351 4.61586L9.16648 1.2029C9.53443 0.825296 9.97371 0.524531 10.4588 0.318052C10.9439 0.111574 11.4652 0.00349338 11.9925 8.32951e-05C12.5197 -0.00332679 13.0423 0.0980011 13.5301 0.298187C14.0178 0.498373 14.461 0.793431 14.8338 1.16624C15.2066 1.53905 15.5016 1.98218 15.7018 2.46993C15.902 2.95768 16.0033 3.48032 15.9999 4.00754C15.9965 4.53476 15.8884 5.05606 15.6819 5.54117C15.4755 6.02629 15.1747 6.46557 14.7971 6.83353L13.4645 8.1661C13.4125 8.22198 13.3497 8.26681 13.2799 8.2979C13.2101 8.32899 13.1348 8.34571 13.0584 8.34705C12.982 8.3484 12.9062 8.33435 12.8353 8.30574C12.7645 8.27713 12.7002 8.23455 12.6462 8.18054C12.5921 8.12652 12.5496 8.06218 12.5209 7.99135C12.4923 7.92052 12.4783 7.84466 12.4796 7.76828C12.481 7.6919 12.4977 7.61658 12.5288 7.54681C12.5599 7.47703 12.6047 7.41423 12.6606 7.36216L13.9932 6.02958C14.2573 5.76547 14.4669 5.4519 14.6099 5.10679C14.7529 4.76167 14.8265 4.39177 14.8265 4.01821C14.8265 3.64465 14.7529 3.27475 14.6099 2.92963C14.4669 2.58452 14.2573 2.27095 13.9932 2.00684ZM8.38908 5.24308C8.45417 5.10703 8.57063 5.00239 8.71286 4.95218C8.85509 4.90198 9.01143 4.91031 9.14751 4.97536C9.72232 5.24993 10.2229 5.65841 10.6071 6.1665C10.9914 6.67459 11.2481 7.26745 11.3558 7.89531C11.4634 8.52317 11.4189 9.16769 11.2259 9.77477C11.0328 10.3818 10.697 10.9338 10.2465 11.3841L6.83353 14.7971C6.46557 15.1747 6.02629 15.4755 5.54117 15.6819C5.05606 15.8884 4.53476 15.9965 4.00754 15.9999C3.48032 16.0033 2.95768 15.902 2.46993 15.7018C1.98218 15.5016 1.53905 15.2066 1.16624 14.8338C0.793431 14.461 0.498373 14.0178 0.298187 13.5301C0.0980011 13.0423 -0.00332679 12.5197 8.32951e-05 11.9925C0.00349338 11.4652 0.111574 10.9439 0.318052 10.4588C0.524531 9.97371 0.825296 9.53443 1.2029 9.16648L2.53547 7.8339C2.58754 7.77802 2.65034 7.73319 2.72012 7.7021C2.78989 7.67101 2.86522 7.65429 2.94159 7.65295C3.01797 7.6516 3.09384 7.66565 3.16466 7.69426C3.23549 7.72287 3.29983 7.76545 3.35385 7.81946C3.40786 7.87348 3.45045 7.93782 3.47906 8.00865C3.50766 8.07948 3.52171 8.15534 3.52037 8.23172C3.51902 8.3081 3.5023 8.38342 3.47121 8.45319C3.44012 8.52297 3.3953 8.58577 3.33941 8.63785L2.00684 9.97042C1.7427 10.2346 1.53318 10.5481 1.39023 10.8932C1.24728 11.2384 1.1737 11.6082 1.1737 11.9818C1.1737 12.3553 1.24728 12.7252 1.39023 13.0703C1.53318 13.4154 1.7427 13.729 2.00684 13.9932C2.27098 14.2573 2.58455 14.4668 2.92966 14.6098C3.27478 14.7527 3.64466 14.8263 4.01821 14.8263C4.39176 14.8263 4.76165 14.7527 5.10676 14.6098C5.45187 14.4668 5.76545 14.2573 6.02958 13.9932L9.44255 10.5802C9.76453 10.2585 10.0046 9.86421 10.1426 9.43048C10.2806 8.99675 10.3125 8.53623 10.2356 8.08762C10.1586 7.639 9.97519 7.2154 9.70061 6.8524C9.42602 6.4894 9.06832 6.1976 8.65756 6.00152C8.59013 5.96936 8.52969 5.92423 8.4797 5.8687C8.42971 5.81318 8.39114 5.74835 8.36621 5.67792C8.34128 5.60749 8.33047 5.53284 8.33439 5.45823C8.33831 5.38362 8.3569 5.31051 8.38908 5.24308Z" fill="#B9B9B9" />
+                                    </svg>
+
+                                    <span className='font-medium text-[16px] text-[#B9B9B9] overflow-hidden text-ellipsis whitespace-nowrap'>
+                                        {referralUrl}
                                     </span>
                                 </div>
+                            )
+                        }
 
-                                <a href='#' className='h-[32px] flex justify-between align-end border-t border-dashed border-[#E7E7E7] mt-[20px] pt-[12px]'>
-                                    <span className='lg:text-[16px] text-[#333333] font-medium'>
-                                        О программе
-                                    </span>
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M13.5667 9.55837C13.6837 9.67556 13.7495 9.83441 13.7495 10C13.7495 10.1657 13.6837 10.3245 13.5667 10.4417L7.3167 16.6917C7.19822 16.8021 7.04152 16.8622 6.8796 16.8593C6.71768 16.8565 6.56319 16.7909 6.44868 16.6764C6.33417 16.5619 6.26858 16.4074 6.26572 16.2455C6.26287 16.0836 6.32297 15.9268 6.43337 15.8084L12.2417 10L6.43337 4.1917C6.32297 4.07322 6.26287 3.91652 6.26572 3.7546C6.26858 3.59268 6.33417 3.43819 6.44868 3.32368C6.56319 3.20917 6.71768 3.14358 6.8796 3.14072C7.04152 3.13787 7.19822 3.19797 7.3167 3.30837L13.5667 9.55837Z" fill="#B9B9B9" />
-                                    </svg>
-                                </a>
-                            </div>
-                        </div>
-
-                        <button type='button' className='lg:h-[48px] w-full lg:rounded-[12px] bg-[#ED0028] flex items-center justify-center lg:gap-[8px] cursor-pointer' onClick={() => {
-                            navigator.clipboard.writeText(referralUrl)
-                            alert('Ссылка скопирована в буфер обмена')
-                        }}>
-                            <span className='lg:text-[16px] font-medium text-white'>
+                        <button type='button' className='h-[48px] w-full rounded-[12px] bg-[#ED0028] flex items-center justify-center lg:gap-[8px] gap-[4px] cursor-pointer' onClick={handleCopyLink}>
+                            <span className='text-[16px] font-medium text-white'>
                                 Скопировать ссылку
                             </span>
 
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <svg xmlns="http://www.w3.org/2000/svg" className='lg:w-[20px] lg:h-[20px] w-[16px] h-[16px]' width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <path d="M6.25 2.8125C6.25 1.94917 6.95 1.25 7.8125 1.25H8.125C8.9538 1.25 9.74866 1.57924 10.3347 2.16529C10.9208 2.75134 11.25 3.5462 11.25 4.375V5.9375C11.25 6.80083 11.95 7.5 12.8125 7.5H14.375C15.2038 7.5 15.9987 7.82924 16.5847 8.41529C17.1708 9.00134 17.5 9.7962 17.5 10.625V13.4375C17.5 14.3 16.8 15 15.9375 15H7.8125C7.3981 15 7.00067 14.8354 6.70765 14.5424C6.41462 14.2493 6.25 13.8519 6.25 13.4375V2.8125Z" fill="white" />
                                 <path d="M12.5 4.37503C12.5015 3.32382 12.1229 2.3075 11.4342 1.51337C12.8286 1.88 14.1006 2.61043 15.1201 3.62994C16.1396 4.64945 16.87 5.92146 17.2367 7.31587C16.4425 6.6271 15.4262 6.24857 14.375 6.25003H12.8125C12.7296 6.25003 12.6501 6.21711 12.5915 6.1585C12.5329 6.0999 12.5 6.02041 12.5 5.93753V4.37503ZM4.0625 5.00003H5V13.4375C5 14.1835 5.29632 14.8988 5.82376 15.4263C6.35121 15.9537 7.06658 16.25 7.8125 16.25H13.75V17.1875C13.75 18.05 13.05 18.75 12.1875 18.75H4.0625C3.6481 18.75 3.25067 18.5854 2.95765 18.2924C2.66462 17.9994 2.5 17.6019 2.5 17.1875V6.56253C2.5 5.6992 3.2 5.00003 4.0625 5.00003Z" fill="white" />
                             </svg>
