@@ -3,10 +3,12 @@ import SearchInput from '../../../ui/SearchInput'
 import isMobileDevice from '../../../assets/isMobileDevice'
 
 type OrdersHeadingProps = {
-    handleSetActiveNewOrderPopup: () => void
+    handleSetActiveNewOrderPopup: () => void,
+    searchQuery: string,
+    onSearchChange: (query: string) => void
 }
 
-const OrdersHeading: React.FC<OrdersHeadingProps> = ({ handleSetActiveNewOrderPopup }) => {
+const OrdersHeading: React.FC<OrdersHeadingProps> = ({ handleSetActiveNewOrderPopup, searchQuery, onSearchChange }) => {
     const isMobile = isMobileDevice()
 
     return (
@@ -53,7 +55,12 @@ const OrdersHeading: React.FC<OrdersHeadingProps> = ({ handleSetActiveNewOrderPo
                     </button>
                 </div>
 
-                <SearchInput className='lg:w-[287px] w-full mt-[12px] lg:mt-0 order-[4] lg:order-none' />
+                <SearchInput
+                    className='lg:w-[287px] w-full mt-[12px] lg:mt-0 order-[4] lg:order-none'
+                    value={searchQuery}
+                    onChange={onSearchChange}
+                    placeholder="Поиск по заказам"
+                />
             </div>
         </div>
     )
