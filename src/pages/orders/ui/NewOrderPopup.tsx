@@ -451,7 +451,7 @@ const NewOrderPopup: React.FC<{
                                                         {uploadedFile.size}
                                                     </span>
                                                     <div className={`w-[4px] h-[4px] rounded-full flex-shrink-0 ${uploadedFile.status === 'error' ? 'bg-[#ED0028]' : 'bg-[#B3B3B3]'}`} />
-                                                    <span className={`text-[12px] leading-none text-[${uploadedFile.status === 'error' ? '#ED0028' : uploadedFile.status == 'success' ? '#47D40A}' : '#B3B3B3'}]`}>
+                                                    <span className={`text-[12px] leading-none text-[${uploadedFile.status === 'error' ? '#ED0028' : uploadedFile.status == 'success' ? '#47D40A' : '#B3B3B3'}]`}>
                                                         {uploadedFile.status === 'success' ? 'Успешно' : uploadedFile.status === 'uploading' ? 'Загрузка...' : 'Error'}
                                                     </span>
                                                 </div>
