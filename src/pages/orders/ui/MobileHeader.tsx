@@ -1,12 +1,15 @@
 import React from 'react'
 import { useSidebar } from '../../../context/SidebarContext'
+import { useAuth } from '../../../hooks/useAuth'
+import { usePayment } from '../../../hooks/usePayment'
 
 type MobileHeaderProps = {
     className?: string
 }
 
 const MobileHeader: React.FC<MobileHeaderProps> = ({ className = '' }) => {
-
+    const { openPaymentPopup } = usePayment()
+    const { user } = useAuth()
     const { openAside } = useSidebar()
 
     return (
@@ -25,19 +28,19 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ className = '' }) => {
                         </span>
 
                         <span className='font-semibold text-[16px] text-[white] h-[17px]'>
-                            32 000 ₽
+                            {(user?.balance)?.toLocaleString('ru-RU')} ₽
                         </span>
                     </div>
 
-                    <a href='#' className='w-[32px] h-[32px] bg-white rounded-[7.11px] shadow-[0_0_25.8px_0_#0f0f2b26] flex items-center justify-center'>
+                    <button type='button' onClick={openPaymentPopup} className='w-[32px] h-[32px] bg-white rounded-[7.11px] shadow-[0_0_25.8px_0_#0f0f2b26] flex items-center justify-center border-none outline-none'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
                             <path fill-rule="evenodd" clip-rule="evenodd" d="M10.6667 2C5.88 2 2 5.88 2 10.6667C2 15.4533 5.88 19.3333 10.6667 19.3333C15.4533 19.3333 19.3333 15.4533 19.3333 10.6667C19.3333 5.88 15.4533 2 10.6667 2ZM11.3333 8C11.3333 7.82319 11.2631 7.65362 11.1381 7.5286C11.013 7.40357 10.8435 7.33333 10.6667 7.33333C10.4899 7.33333 10.3203 7.40357 10.1953 7.5286C10.0702 7.65362 10 7.82319 10 8V10H8C7.82319 10 7.65362 10.0702 7.5286 10.1953C7.40357 10.3203 7.33333 10.4899 7.33333 10.6667C7.33333 10.8435 7.40357 11.013 7.5286 11.1381C7.65362 11.2631 7.82319 11.3333 8 11.3333H10V13.3333C10 13.5101 10.0702 13.6797 10.1953 13.8047C10.3203 13.9298 10.4899 14 10.6667 14C10.8435 14 11.013 13.9298 11.1381 13.8047C11.2631 13.6797 11.3333 13.5101 11.3333 13.3333V11.3333H13.3333C13.5101 11.3333 13.6797 11.2631 13.8047 11.1381C13.9298 11.013 14 10.8435 14 10.6667C14 10.4899 13.9298 10.3203 13.8047 10.1953C13.6797 10.0702 13.5101 10 13.3333 10H11.3333V8Z" fill="#EA0129" />
                         </svg>
-                    </a>
+                    </button>
                 </div>
 
-                <div className='flex items-center justify-center h-[48px] px-[4px] bg-[#F6F6F6] border border-[#F3F3F3] shadow-[0_0_25.8px_0_#0f0f2b26] rounded-[8px] gap-[8px]'>
-                    <img src='/images/userAvatar.jpg' alt='Аватар' className='w-[40px] h-[40px] rounded-[8px]' />
+                <a href='/profile' className='flex items-center justify-center h-[48px] px-[4px] bg-[#F6F6F6] border border-[#F3F3F3] shadow-[0_0_25.8px_0_#0f0f2b26] rounded-[8px] gap-[8px]'>
+                    <img src={user?.avatar_url || '/images/user.svg'} alt='Аватар' className='w-[40px] h-[40px] rounded-[8px]' />
                     <button type='button' className='outline-none border-none bg-none'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" fill="none">
                             <g opacity="0.3">
@@ -45,7 +48,7 @@ const MobileHeader: React.FC<MobileHeaderProps> = ({ className = '' }) => {
                             </g>
                         </svg>
                     </button>
-                </div>
+                </a>
             </div>
         </div>
     )

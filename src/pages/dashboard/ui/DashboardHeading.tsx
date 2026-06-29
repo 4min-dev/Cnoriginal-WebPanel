@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react'
 import isMobileDevice from '../../../assets/isMobileDevice'
 import type { Order } from '../../../types/Order'
+import type { Delivery } from '../../../types/Delivery'
 
 interface DashboardHeadingProps {
     dobropostData: Order[],
-    deliveryData: Order[]
+    deliveryData: Delivery[]
 }
 
 const DashboardHeading: React.FC<DashboardHeadingProps> = ({ dobropostData, deliveryData }) => {
@@ -22,19 +23,15 @@ const DashboardHeading: React.FC<DashboardHeadingProps> = ({ dobropostData, deli
         dobropostData.forEach((order) => {
             const desc = (order.description || '').toLowerCase()
 
-            if (desc.includes('новый заказ') || desc.includes('новый')) {
+            if (order.actual_bx_status === 'new' || order.actual_bx_status === 'data_send') {
                 counts.new++
-            } else if (desc.includes('ошибк') || desc.includes('error')) {
+            } else if (order.actual_bx_status === 'error') {
                 counts.error++
-            } else if (desc.includes('складе в китае') || desc.includes('china_storage')) {
+            } else if (desc.includes('складе в китае') || desc.includes('china_storage') || order.actual_bx_status === 'china_storage') {
                 counts.china_storage++
-            } else if (desc.includes('в пути') || desc.includes('shipped_to_russia')) {
+            } else if (order.actual_bx_status === 'shipped_to_russia') {
                 counts.shipped_to_russia++
-            } else if (
-                desc.includes('пункте выдачи') ||
-                desc.includes('pvz') ||
-                desc.includes('ожидает в')
-            ) {
+            } else if (order.actual_bx_status === 'pvz' || order.actual_bx_status === 'pickup') {
                 counts.pvz++
             }
         })

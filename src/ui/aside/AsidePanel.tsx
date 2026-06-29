@@ -1,23 +1,26 @@
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import PaymentPopup from '../PaymentPopup'
 import isMobileDevice from '../../assets/isMobileDevice'
 import { useSidebar } from '../../context/SidebarContext'
-import type TelegramUser from '../../types/TelegramUser'
-
-const devMode = import.meta.env.VITE_DEV_MODE
+import { useLogoutMutation } from '../../redux/services/authService'
+import { useDispatch } from 'react-redux'
+import { logout } from '../../redux/slices/authSlice'
+import { useAuth } from '../../hooks/useAuth'
+import { usePayment } from '../../hooks/usePayment'
 
 const AsidePanel: React.FC = () => {
-    const user = JSON.parse(window.localStorage.getItem('user') || '{}') as TelegramUser
+    const { openPaymentPopup } = usePayment()
+    const dispatch = useDispatch()
+    const { user } = useAuth()
 
-    const [isPaymentPopup, setIsPaymentPopup] = useState<boolean>(false)
+    const [fetchToLogout] = useLogoutMutation()
     const [isHovered, setIsHovered] = useState<boolean>(false)
 
     const location = useLocation()
     const { isAsideActive, closeAside } = useSidebar()
     const isMobile = isMobileDevice()
 
-    if ((!user || !user.id) && !devMode) return null
+    if (!user || window.location.pathname === '/registration' || window.location.pathname === '/authorization') return null
 
     const asideLinks = [
         {
@@ -46,20 +49,49 @@ const AsidePanel: React.FC = () => {
         },
         {
             title: 'Задать вопрос',
-            pathname: 'http://t.me/',
+            pathname: 'https://t.me/Cnoriginalvl',
             icon: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path fillRule="evenodd" clipRule="evenodd" d="M2.25 12C2.25 6.615 6.615 2.25 12 2.25C17.385 2.25 21.75 6.615 21.75 12C21.75 17.385 17.385 21.75 12 21.75C6.615 21.75 2.25 17.385 2.25 12ZM13.628 8.083C12.738 7.306 11.262 7.306 10.373 8.083C10.2233 8.21402 10.0277 8.28019 9.82915 8.26697C9.63064 8.25375 9.44552 8.16221 9.3145 8.0125C9.18348 7.86279 9.11731 7.66716 9.13053 7.46865C9.14375 7.27014 9.23529 7.08502 9.385 6.954C10.839 5.682 13.161 5.682 14.615 6.954C16.128 8.278 16.128 10.472 14.615 11.796C14.362 12.0166 14.0805 12.2023 13.778 12.348C13.102 12.676 12.75 13.122 12.75 13.5V14.25C12.75 14.4489 12.671 14.6397 12.5303 14.7803C12.3897 14.921 12.1989 15 12 15C11.8011 15 11.6103 14.921 11.4697 14.7803C11.329 14.6397 11.25 14.4489 11.25 14.25V13.5C11.25 12.221 12.31 11.393 13.125 10.998C13.307 10.91 13.476 10.799 13.628 10.667C14.458 9.94 14.458 8.81 13.628 8.083ZM12 18C12.1989 18 12.3897 17.921 12.5303 17.7803C12.671 17.6397 12.75 17.4489 12.75 17.25C12.75 17.0511 12.671 16.8603 12.5303 16.7197C12.3897 16.579 12.1989 16.5 12 16.5C11.8011 16.5 11.6103 16.579 11.4697 16.7197C11.329 16.8603 11.25 17.0511 11.25 17.25C11.25 17.4489 11.329 17.6397 11.4697 17.7803C11.6103 17.921 11.8011 18 12 18Z" fill="currentColor" />
             </svg>
-        }
+        },
+        {
+            title: 'Склады',
+            pathname: '/warehouses',
+            icon: <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <g clip-path="url(#clip0_1870_14492)">
+                    <path d="M3.375 3C2.339 3 1.5 3.84 1.5 4.875V5.625C1.5 6.661 2.34 7.5 3.375 7.5H20.625C21.66 7.5 22.5 6.66 22.5 5.625V4.875C22.5 3.839 21.66 3 20.625 3H3.375Z" fill="#B9B9B9" />
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.08789 9L3.62789 18.176C3.67276 18.9395 4.00758 19.6571 4.5639 20.182C5.12022 20.7069 5.85603 20.9995 6.62089 21H17.3779C18.1431 21 18.8794 20.7077 19.4362 20.1827C19.9929 19.6578 20.328 18.9399 20.3729 18.176L20.9139 9H3.08789ZM9.25089 12.75C9.25089 12.5511 9.32991 12.3603 9.47056 12.2197C9.61121 12.079 9.80198 12 10.0009 12H14.0009C14.1998 12 14.3906 12.079 14.5312 12.2197C14.6719 12.3603 14.7509 12.5511 14.7509 12.75C14.7509 12.9489 14.6719 13.1397 14.5312 13.2803C14.3906 13.421 14.1998 13.5 14.0009 13.5H10.0009C9.80198 13.5 9.61121 13.421 9.47056 13.2803C9.32991 13.1397 9.25089 12.9489 9.25089 12.75Z" fill="#B9B9B9" />
+                </g>
+                <defs>
+                    <clipPath id="clip0_1870_14492">
+                        <rect width="24" height="24" fill="white" />
+                    </clipPath>
+                </defs>
+            </svg>
+        },
     ]
+
+    const handleLogout = () => {
+        fetchToLogout()
+            .unwrap()
+            .then(() => {
+                dispatch(logout())
+                localStorage.removeItem('user')
+                window.location.href = '/authorization'
+            })
+            .catch((err) => {
+                console.error('Ошибка при выходе:', err)
+                dispatch(logout())
+                localStorage.removeItem('user')
+                window.location.href = '/authorization'
+            })
+    }
 
     return (
         <>
-            {isPaymentPopup && <PaymentPopup onClose={() => setIsPaymentPopup(false)} />}
-
             {!isMobile ? (
                 <aside
-                    className={`flex flex-col bg-white shadow-[0_0_25.8px_0_#0f0f2b26] h-[860px] rounded-bl-[16px] rounded-br-[16px] transition-all duration-300 ease-out overflow-hidden ${isHovered ? 'w-[292px] p-[24px]' : 'w-[88px] px-[16px] py-[24px]'} sticky left-0 top-0 z-20`}
+                    className={`flex flex-col bg-white shadow-[0_0_25.8px_0_#0f0f2b26] h-full rounded-bl-[16px] rounded-br-[16px] transition-all duration-300 ease-out overflow-hidden ${isHovered ? 'w-[292px] p-[24px]' : 'w-[88px] px-[16px] py-[24px]'} sticky left-0 top-0 z-20`}
                     onMouseEnter={() => setIsHovered(true)}
                     onMouseLeave={() => setIsHovered(false)}
                 >
@@ -72,7 +104,7 @@ const AsidePanel: React.FC = () => {
                         </div>
 
                         {isHovered && (
-                            <button type="button" className="ml-auto w-[36px] h-[36px] rounded-[8px] flex items-center justify-center shadow-[0_0_25.8px_0_#0f0f2b26] bg-white">
+                            <button type="button" className="ml-auto w-[36px] h-[36px] rounded-[8px] flex items-center justify-center shadow-[0_0_25.8px_0_#0f0f2b26] bg-white cursor-pointer" onClick={handleLogout}>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                     <path d="M6.875 7.5V4.375C6.875 3.87772 7.07254 3.40081 7.42417 3.04917C7.77581 2.69754 8.25272 2.5 8.75 2.5H13.75C14.2473 2.5 14.7242 2.69754 15.0758 3.04917C15.4275 3.40081 15.625 3.87772 15.625 4.375V15.625C15.625 16.1223 15.4275 16.5992 15.0758 16.9508C14.7242 17.3025 14.2473 17.5 13.75 17.5H8.75C8.25272 17.5 7.77581 17.3025 7.42417 16.9508C7.07254 16.5992 6.875 16.1223 6.875 15.625V12.5M4.375 12.5L1.875 10M1.875 10L4.375 7.5M1.875 10H12.5" stroke="#B9B9B9" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
@@ -108,13 +140,13 @@ const AsidePanel: React.FC = () => {
                                 <div className="flex items-center justify-between">
                                     <div className="flex flex-col">
                                         <span className="text-[14px] text-[#FFFFFF] opacity-60 h-[17px]">Баланс</span>
-                                        <span className="font-semibold text-[20px] text-[#FFFFFF] h-[24px]">32 000 ₽</span>
+                                        <span className="font-semibold text-[20px] text-[#FFFFFF] h-[24px]">{(user.balance)?.toLocaleString('ru-RU')} ₽</span>
                                     </div>
 
                                     <button
                                         type="button"
                                         className="w-[36px] h-[36px] flex items-center justify-center rounded-[8px] shadow-[0_0_25.8px_0_#0f0f2b26] bg-white outline-none border-none cursor-pointer"
-                                        onClick={() => setIsPaymentPopup(true)}
+                                        onClick={openPaymentPopup}
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                             <path fillRule="evenodd" clipRule="evenodd" d="M12 2.25C6.615 2.25 2.25 6.615 2.25 12C2.25 17.385 6.615 21.75 12 21.75C17.385 21.75 21.75 17.385 21.75 12C21.75 6.615 17.385 2.25 12 2.25ZM12.75 9C12.75 8.80109 12.671 8.61032 12.5303 8.46967C12.3897 8.32902 12.1989 8.25 12 8.25C11.8011 8.25 11.6103 8.32902 11.4697 8.46967C11.329 8.61032 11.25 8.80109 11.25 9V11.25H9C8.80109 11.25 8.61032 11.329 8.46967 11.4697C8.32902 11.6103 8.25 11.8011 8.25 12C8.25 12.1989 8.32902 12.3897 8.46967 12.5303C8.61032 12.671 8.80109 12.75 9 12.75H11.25V15C11.25 15.1989 11.329 15.3897 11.4697 15.5303C11.6103 15.671 11.8011 15.75 12 15.75C12.1989 15.75 12.3897 15.671 12.5303 15.5303C12.671 15.3897 12.75 15.1989 12.75 15V12.75H15C15.1989 12.75 15.3897 12.671 15.5303 12.5303C15.671 12.3897 15.75 12.1989 15.75 12C15.75 11.8011 15.671 11.6103 15.5303 11.4697C15.3897 11.329 15.1989 11.25 15 11.25H12.75V9Z" fill="#EA0129" />
@@ -125,32 +157,36 @@ const AsidePanel: React.FC = () => {
                         </div>
                     )}
 
-                    <div className={`flex items-center p-[8px] rounded-[12px] bg-[#F6F6F6] ${isHovered ? 'h-[56px] mt-[8px]' : 'w-fit flex-col mt-auto'}`}>
-                        <img className='w-[40px] h-[40px] rounded-[8px]' src={user.photo_url} alt="Аватар" />
+                    <a href='/profile' className={`flex items-center p-[8px] rounded-[12px] bg-[#F6F6F6] ${isHovered ? 'h-[56px] mt-[8px]' : 'w-fit flex-col mt-auto'}`}>
+                        <img className='w-[40px] h-[40px] rounded-[8px]' src={user.avatar_url || '/images/user.svg'} alt="Аватар" />
 
                         {
                             isHovered && <div className='flex flex-col gap-[2px] ml-[12px]'>
-                                <span className='font-medium text-[16px] text-[#333333] whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[19px]'>
+                                <span className='font-medium text-[16px] text-[#333333] whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block '>
                                     {
                                         user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name || user.last_name || 'Пользователь'
                                     }
                                 </span>
-                                <span className='text-[14px] text-[#333333] opacity-60 whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[17px]'>
-                                    {
-                                        `@${user.username}`
-                                    }
-                                </span>
+                                {
+                                    user.username && (
+                                        <span className='text-[14px] text-[#333333] opacity-60 whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[17px]'>
+                                            {
+                                                `@${user.username}`
+                                            }
+                                        </span>
+                                    )
+                                }
                             </div>
                         }
 
-                        <button type='button' className={`bg-none outline-none border-none cursor-pointer  ml-auto flex items-center justify-center ${isHovered ? 'ml-[22px]' : '!ml-0'} mt-[0px]`}>
+                        <button type='button' className={`bg-none outline-none border-none cursor-pointer ml-auto flex items-center justify-center ${isHovered ? 'ml-[22px]' : '!ml-0 mt-[10px]'}`}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <g opacity="0.3">
                                     <path fillRule="evenodd" clipRule="evenodd" d="M11.0781 2.25C10.1611 2.25 9.37906 2.913 9.22806 3.817L9.05006 4.889C9.03006 5.009 8.93506 5.149 8.75306 5.237C8.41041 5.40171 8.08079 5.59226 7.76706 5.807C7.60106 5.922 7.43306 5.933 7.31706 5.89L6.30006 5.508C5.8843 5.35224 5.42675 5.34906 5.00887 5.49904C4.59099 5.64901 4.23989 5.94241 4.01806 6.327L3.09606 7.924C2.87415 8.30836 2.79577 8.75897 2.87487 9.19569C2.95398 9.6324 3.18543 10.0269 3.52806 10.309L4.36806 11.001C4.46306 11.079 4.53806 11.23 4.52206 11.431C4.49356 11.8101 4.49356 12.1909 4.52206 12.57C4.53706 12.77 4.46306 12.922 4.36906 13L3.52806 13.692C3.18543 13.9741 2.95398 14.3686 2.87487 14.8053C2.79577 15.242 2.87415 15.6926 3.09606 16.077L4.01806 17.674C4.24004 18.0584 4.59121 18.3516 5.00908 18.5014C5.42695 18.6512 5.88441 18.6478 6.30006 18.492L7.31906 18.11C7.43406 18.067 7.60206 18.079 7.76906 18.192C8.08106 18.406 8.41006 18.597 8.75406 18.762C8.93606 18.85 9.03106 18.99 9.05106 19.112L9.22906 20.183C9.38006 21.087 10.1621 21.75 11.0791 21.75H12.9231C13.8391 21.75 14.6221 21.087 14.7731 20.183L14.9511 19.111C14.9711 18.991 15.0651 18.851 15.2481 18.762C15.5921 18.597 15.9211 18.406 16.2331 18.192C16.4001 18.078 16.5681 18.067 16.6831 18.11L17.7031 18.492C18.1186 18.6472 18.5756 18.6501 18.9931 18.5002C19.4105 18.3502 19.7613 18.0571 19.9831 17.673L20.9061 16.076C21.128 15.6916 21.2063 15.241 21.1272 14.8043C21.0481 14.3676 20.8167 13.9731 20.4741 13.691L19.6341 12.999C19.5391 12.921 19.4641 12.77 19.4801 12.569C19.5085 12.1899 19.5085 11.8091 19.4801 11.43C19.4641 11.23 19.5391 11.078 19.6331 11L20.4731 10.308C21.1811 9.726 21.3641 8.718 20.9061 7.923L19.9841 6.326C19.7621 5.94159 19.4109 5.6484 18.993 5.49861C18.5752 5.34883 18.1177 5.35215 17.7021 5.508L16.6821 5.89C16.5681 5.933 16.4001 5.921 16.2331 5.807C15.9197 5.5923 15.5904 5.40175 15.2481 5.237C15.0651 5.15 14.9711 5.01 14.9511 4.889L14.7721 3.817C14.6991 3.37906 14.4732 2.98122 14.1344 2.69427C13.7956 2.40732 13.366 2.24989 12.9221 2.25H11.0791H11.0781ZM12.0001 15.75C12.9946 15.75 13.9484 15.3549 14.6517 14.6517C15.355 13.9484 15.7501 12.9946 15.7501 12C15.7501 11.0054 15.355 10.0516 14.6517 9.34835C13.9484 8.64509 12.9946 8.25 12.0001 8.25C11.0055 8.25 10.0517 8.64509 9.34841 9.34835C8.64514 10.0516 8.25006 11.0054 8.25006 12C8.25006 12.9946 8.64514 13.9484 9.34841 14.6517C10.0517 15.3549 11.0055 15.75 12.0001 15.75Z" fill="#333333" />
                                 </g>
                             </svg>
                         </button>
-                    </div>
+                    </a>
                 </aside>
             ) : (
                 isAsideActive && (
@@ -171,7 +207,7 @@ const AsidePanel: React.FC = () => {
                         <nav className="flex flex-col mt-[28px] gap-[16px]">
                             {asideLinks.map((asideLink, index) => {
                                 const isActive = location.pathname.includes(asideLink.pathname)
-                                const isLast = index === asideLinks.length - 1
+                                const isLast = index === asideLinks.length - 2
 
                                 return (
                                     <a
@@ -193,7 +229,7 @@ const AsidePanel: React.FC = () => {
                         <div className="flex items-center justify-between bg-[linear-gradient(94.53deg,#FF7E7E_-23.56%,#ED0028_104.18%)] w-full h-[65px] rounded-[12px] p-[12px] mt-auto">
                             <div className="flex flex-col">
                                 <span className="text-[14px] text-[#FFFFFF] opacity-60 h-[17px]">Баланс</span>
-                                <span className="font-semibold text-[20px] text-[#FFFFFF] h-[24px]">32 000 ₽</span>
+                                <span className="font-semibold text-[20px] text-[#FFFFFF] h-[24px]">{(user.balance)?.toLocaleString('ru-RU')} ₽</span>
                             </div>
 
                             <button
@@ -201,7 +237,7 @@ const AsidePanel: React.FC = () => {
                                 className="w-[36px] h-[36px] flex items-center justify-center rounded-[8px] shadow-[0_0_25.8px_0_#0f0f2b26] bg-white outline-none border-none cursor-pointer"
                                 onClick={() => {
                                     closeAside()
-                                    setIsPaymentPopup(true)
+                                    openPaymentPopup()
                                 }}
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -210,11 +246,11 @@ const AsidePanel: React.FC = () => {
                             </button>
                         </div>
 
-                        <div className={`flex items-start p-[8px] rounded-[12px] bg-[#F6F6F6] mt-[8px]`}>
-                            <img className='w-[40px] h-[40px] rounded-[8px]' src={user.photo_url} alt="Аватар" />
+                        <a href='/profile' className={`flex items-сenter p-[8px] rounded-[12px] bg-[#F6F6F6] mt-[8px]`}>
+                            <img className='w-[40px] h-[40px] rounded-[8px]' src={user.avatar_url || '/images/user.svg'} alt="Аватар" />
 
-                            <div className='flex flex-col gap-[2px] ml-[12px]'>
-                                <span className='font-medium text-[16px] text-[#333333] whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block h-[19px]'>
+                            <div className='flex flex-col gap-[2px] ml-[12px] justify-center'>
+                                <span className='font-medium text-[16px] text-[#333333] whitespace-nowrap text-ellipsis max-w-[120px] overflow-hidden block'>
                                     {
                                         user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name || user.last_name || 'Пользователь'
                                     }
@@ -236,7 +272,7 @@ const AsidePanel: React.FC = () => {
                                     </g>
                                 </svg>
                             </button>
-                        </div>
+                        </a>
                     </aside>
                 )
             )}

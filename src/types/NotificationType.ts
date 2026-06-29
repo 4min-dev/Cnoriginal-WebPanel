@@ -1,0 +1,1 @@
+export type NotificationType = 'delivery' | 'dobropost' | 'self_redemption' | 'dobropost_bx'

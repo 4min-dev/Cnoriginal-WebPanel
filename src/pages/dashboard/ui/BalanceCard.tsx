@@ -80,8 +80,9 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ data, setSelectedPeriod }) =>
     const getReplenishmentColor = (change: number) =>
         change >= 0 ? '#15DB15' : '#ED0028'
 
-    const getSpendingColor = (change: number) =>
-        change <= 0 ? '#15DB15' : '#ED0028'
+    const getSpendingColor = (change: number) => {
+        return change <= 0 ? '#ED0028' : '#15DB15'
+    }
 
     const scrollContainerRef = React.useRef<HTMLDivElement>(null)
     const [canScrollLeft, setCanScrollLeft] = React.useState<boolean>(false)
@@ -140,8 +141,8 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ data, setSelectedPeriod }) =>
                                 <g clipPath="url(#clip0_351_2241)">
                                     <path
                                         d={replenishmentChange >= 0
-                                            ? "M11.3334 4.66665L11.3334 11.3333M11.3334 11.3333L4.66671 11.3333M11.3334 11.3333L4.66671 4.66665"
-                                            : "M11.3333 11.3337L11.3333 4.66699M11.3333 4.66699L4.66665 4.66699M11.3333 4.66699L4.66665 11.3337"
+                                            ? "M11.3333 11.3337L11.3333 4.66699M11.3333 4.66699L4.66665 4.66699M11.3333 4.66699L4.66665 11.3337"
+                                            : "M11.3334 4.66665L11.3334 11.3333M11.3334 11.3333L4.66671 11.3333M11.3334 11.3333L4.66671 4.66665"
                                         }
                                         stroke="currentColor"
                                         strokeWidth="1.3"
@@ -179,8 +180,8 @@ const BalanceCard: React.FC<BalanceCardProps> = ({ data, setSelectedPeriod }) =>
                                 <g clipPath="url(#clip0_403_2215)">
                                     <path
                                         d={spendingChange <= 0
-                                            ? "M11.3334 4.66665L11.3334 11.3333M11.3334 11.3333L4.66671 11.3333M11.3334 11.3333L4.66671 4.66665"
-                                            : "M11.3333 11.3337L11.3333 4.66699M11.3333 4.66699L4.66665 4.66699M11.3333 4.66699L4.66665 11.3337"
+                                            ? "M11.3333 11.3337L11.3333 4.66699M11.3333 4.66699L4.66665 4.66699M11.3333 4.66699L4.66665 11.3337"
+                                            : "M11.3334 4.66665L11.3334 11.3333M11.3334 11.3333L4.66671 11.3333M11.3334 11.3333L4.66671 4.66665"
                                         }
                                         stroke="currentColor"
                                         strokeWidth="1.3"

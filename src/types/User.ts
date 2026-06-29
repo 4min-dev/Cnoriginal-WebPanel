@@ -1,4 +1,5 @@
 export interface User {
+    id: string,
     first_name: string,
     last_name: string,
     patronymic_name: string,
@@ -10,13 +11,21 @@ export interface User {
     email: string,
     passport_series: string,
     passport_number: string,
-    passport_issue_date: Date,
+    passport_issue_date: string,
     inn: string,
     to_pay_sum: number,
     to_pay_orders: number,
+    china_to_pay_sum?: number,
+    china_to_pay_orders?: number,
+    delivery_to_pay_sum?: number,
+    delivery_to_pay_orders?: number,
     balance: number,
     subscribe_price: number,
     sub_end: string,
     orders_in_work: number,
     avatar_url: string,
+    login_phone: string,
+    phone: string,
+    username?: string,
+    birthday?: string
 }

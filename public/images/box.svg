@@ -1,0 +1,12 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+
+  <!-- top (самая светлая) -->
+  <path d="M256 96 L400 160 L256 224 L112 160 Z" fill="#BDBDBD"/>
+
+  <!-- left (самая тёмная) -->
+  <path d="M112 160 L256 224 L256 400 L112 336 Z" fill="#7A7A7A"/>
+
+  <!-- right (средняя) -->
+  <path d="M400 160 L256 224 L256 400 L400 336 Z" fill="#9E9E9E"/>
+
+</svg>

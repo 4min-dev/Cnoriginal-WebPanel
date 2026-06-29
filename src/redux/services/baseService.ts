@@ -11,21 +11,33 @@ import { tgInitData } from '../../assets/tgInitData'
 import type { RootState } from '../../store'
 
 const API_URL = import.meta.env.VITE_API_URL
+const devMode = import.meta.env.VITE_DEV_MODE
 
 const baseQuery = fetchBaseQuery({
     baseUrl: API_URL,
-    prepareHeaders: (headers, { getState }) => {
+    prepareHeaders: (headers, { getState, arg }) => {
         const token = (getState() as RootState).auth.accessToken
-        if (token) {
+
+        const url =
+            typeof arg === 'string'
+                ? arg
+                : arg?.url
+
+        const isRefreshRequest = url === '/auth/refresh'
+
+        if (token && !isRefreshRequest) {
             headers.set('Authorization', `Bearer ${token}`)
         }
+
         return headers
-    },
+    }
 })
 
 type RefreshResponse = {
-    access_token: string
-    refresh_token?: string
+    data: {
+        access_token: string
+        refresh_token?: string
+    }
 }
 
 let isRefreshing = false
@@ -41,7 +53,7 @@ export const baseQueryWithReauth: BaseQueryFn<
     if (result?.error?.status === 401) {
         const currentRefreshToken = (api.getState() as RootState).auth.refreshToken
 
-        if (!currentRefreshToken) {
+        if (!currentRefreshToken && !devMode) {
             api.dispatch(logout())
             return result
         }
@@ -51,13 +63,11 @@ export const baseQueryWithReauth: BaseQueryFn<
 
             refreshPromise = baseQuery(
                 {
-                    url: '/auth/auth/refresh',
+                    url: '/auth/refresh',
                     method: 'POST',
                     headers: {
+                        Authorization: `Bearer ${currentRefreshToken}`,
                         'X-Tg-Init-Data': tgInitData,
-                    },
-                    body: {
-                        refresh_token: currentRefreshToken,
                     },
                 },
                 api,
@@ -73,17 +83,18 @@ export const baseQueryWithReauth: BaseQueryFn<
         const refreshResult = await refreshPromise
 
         if (refreshResult?.data) {
-            const { access_token, refresh_token } = refreshResult.data
+            const { access_token, refresh_token } = refreshResult.data.data
 
             api.dispatch(
                 setCredentials({
                     accessToken: access_token,
-                    refreshToken: refresh_token ?? currentRefreshToken,
+                    refreshToken: refresh_token ?? currentRefreshToken!,
                 })
             )
 
             result = await baseQuery(args, api, extraOptions)
-        } else {
+
+        } else if (!devMode) {
             api.dispatch(logout())
         }
     }

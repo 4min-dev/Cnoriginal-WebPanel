@@ -1,6 +1,7 @@
 import React from 'react'
+import Button from '../buttons/Button'
 
-const Popup = ({ icon, title, description, buttonText, buttonHandler, popupClassname, closeHandler, buttonDisabled }: { icon: React.ReactNode; title: string; description: string; buttonText: string; buttonHandler: () => void, popupClassname?: string, closeHandler: () => void, buttonDisabled?: boolean }) => {
+const Popup = ({ icon, title, description, buttonText, buttonHandler, popupClassname, closeHandler, buttonDisabled }: { icon: React.ReactNode, title: string, description: string, buttonText: string, buttonHandler: () => void, popupClassname?: string, closeHandler: () => void, buttonDisabled?: boolean }) => {
     return (
         <div className="fixed top-0 left-0 bottom-0 right-0 bg-black/60 z-[999] flex items-center justify-center" onClick={closeHandler}>
             <div
@@ -33,9 +34,7 @@ const Popup = ({ icon, title, description, buttonText, buttonHandler, popupClass
                     </div>
                 </div>
 
-                <button type='button' className='mt-[24px] lg:mt-[28px] h-[44px] rounded-[10px] bg-[#ED0028] font-medium text-[15px] lg:text-[16px] text-[#FCFDFF] px-[16px] cursor-pointer' onClick={buttonHandler} disabled={buttonDisabled}>
-                    {buttonText}
-                </button>
+                <Button className='mt-[24px] lg:mt-[28px] h-[44px] rounded-[10px] text-[15px] lg:text-[16px] px-[16px]' clickHandler={buttonHandler} disabled={buttonDisabled} buttonText={buttonText} />
             </div>
         </div>
     )
