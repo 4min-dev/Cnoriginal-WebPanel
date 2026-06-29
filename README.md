@@ -17,7 +17,7 @@
 ## 📦 Установка
 
 ```bash
-git clone https://github.com/4min-dev/Cnoriginal-WebPanel.git
+git clone https://github.com/4min-dev/Cnoriginal-WebPanel
 cd Cnoriginal-WebPanel
 npm install
 ```
